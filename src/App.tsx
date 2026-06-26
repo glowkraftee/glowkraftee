@@ -10,7 +10,7 @@ function App() {
       height: '100vh', 
       fontFamily: 'sans-serif' 
     }}>
-      <h1>🛍️ GlowKraftee Storefront Launching Soon</h1>
+      <h1>🛍️ GlowKraftee Storefront - We care Beauty of Home with Love Launching Soon</h1>
       <p>Your production pipeline is officially successfully configured!</p>
     </div>
   );
