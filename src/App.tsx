@@ -7,7 +7,7 @@ const handleCheckout = () => {
     const baseUrl = "https://sandbox.api.atsafepay.com/components";
     const clientKey = "sec_92e7c585-de47-40f7-b59b-83d350290c06";
     const orderId = `ORDER_${Date.now()}`;
-    const checkoutUrl = `${baseUrl}?env=sandbox&client=${clientKey}&amount=15.00&currency=USD&order_id=${orderId}`;
+  const checkoutUrl = `${baseUrl}?env=sandbox&client=${clientKey}&amount=15.00&currency=USD&order_id=${orderId}`;
     
     window.location.href = checkoutUrl;
   };
