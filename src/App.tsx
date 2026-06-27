@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface Window {
   safepay?: {
@@ -11,22 +11,9 @@ interface Window {
 declare const window: Window;
 
 function App() {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://storage.googleapis.com/safepayobjects/api/safepay-checkout.min.js";
-    script.async = true;
-    script.onload = () => setScriptLoaded(true);
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (scriptLoaded && window.safepay) {
+    // Check if Safepay is loaded from index.html
+    if (window.safepay) {
       window.safepay.Button.render({
         env: 'sandbox',
         amount: 1500.00,
@@ -50,8 +37,10 @@ function App() {
           console.log("Payment cancelled.");
         }
       }, '#safepay-button-container');
+    } else {
+      console.error("Safepay SDK failed to load globally via index.html.");
     }
-  }, [scriptLoaded]);
+  }, []);
 
   return (
     <div style={{ 
@@ -86,9 +75,8 @@ function App() {
           </div>
         </div>
 
-        <div id="safepay-button-container" style={{ minHeight: '50px', marginTop: '20px' }}>
-          {!scriptLoaded && <p style={{ color: '#9ca3af' }}>Loading secure payment gateway...</p>}
-        </div>
+        {/* The target container where the checkout button will render */}
+        <div id="safepay-button-container" style={{ minHeight: '50px', marginTop: '20px' }}></div>
       </div>
     </div>
   );
