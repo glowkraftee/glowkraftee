@@ -6,10 +6,10 @@ function App() {
     const clientKey = "sec_92e7c585-de47-40f7-b59b-83d350290c06";
     const orderId = `ORDER_${Date.now()}`;
     
-    // Construct the direct payment link
-    const checkoutUrl = `${baseUrl}?env=sandbox&client=${clientKey}&amount=1500&currency=PKR&order_id=${orderId}`;
+    // Updated currency parameter to USD and amount to 15.00
+    const checkoutUrl = `${baseUrl}?env=sandbox&client=${clientKey}&amount=15.00&currency=USD&order_id=${orderId}`;
     
-    // Redirect securely to the Safepay page
+    // Redirect securely to the Safepay checkout view
     window.location.href = checkoutUrl;
   };
 
@@ -42,7 +42,8 @@ function App() {
         <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '20px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', fontSize: '14px' }}>
             <span>Test Order Summary</span>
-            <span style={{ marginLeft: 'auto', fontWeight: 'bold' }}>Rs. 1,500.00</span>
+            {/* Updated UI text label to US Dollars */}
+            <span style={{ marginLeft: 'auto', fontWeight: 'bold' }}>$15.00</span>
           </div>
         </div>
 
