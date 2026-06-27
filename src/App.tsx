@@ -33,7 +33,7 @@ function App() {
         currency: 'PKR',
         client: {
           sandbox: "sec_92e7c585-de47-40f7-b59b-83d350290c06",
-          production: "<YOUR_PRODUCTION_KEY>"
+          production: ""
         },
         payment: function (data: any, actions: any) {
           return actions.payment.create({
