@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 function App() {
 const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success'>('idle');
 
-const handleSimulatedCheckout = () => {
-  setPaymentStatus('processing');
-  
-  setTimeout(() => {
-    setPaymentStatus('success');
-  }, 2500);
-};
+const handleCheckout = () => {
+    const baseUrl = "https://sandbox.api.atsafepay.com/components";
+    const clientKey = "sec_92e7c585-de47-40f7-b59b-83d350290c06";
+    const orderId = `ORDER_${Date.now()}`;
+    const checkoutUrl = `${baseUrl}?env=sandbox&client=${clientKey}&amount=15.00&currency=USD&order_id=${orderId}`;
+    
+    window.location.href = checkoutUrl;
+  };
 
   return (
     <div style={{ 
@@ -51,7 +52,7 @@ const handleSimulatedCheckout = () => {
 
         {paymentStatus === 'idle' && (
           <button 
-         onClick={handleSimulatedCheckout}
+        onClick={handleCheckout}
             style={{
               width: '100%',
               backgroundColor: '#0066cc',
