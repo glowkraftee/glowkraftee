@@ -44,11 +44,10 @@ function App() {
           });
         },
         onCheckout: function(data: any, actions: any) {
-          console.log("Payment completed successfully:", data);
           alert("🎉 Thank you! Your GlowKraftee payment was processed successfully.");
         },
         onCancel: function(data: any, actions: any) {
-          console.log("Payment cancelled by customer.");
+          console.log("Payment cancelled.");
         }
       }, '#safepay-button-container');
     }
@@ -73,14 +72,16 @@ function App() {
         boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)',
         textAlign: 'center'
       }}>
-        <h1 style={{ color: '#111827', fontSize: '24px', marginBottom: '10px' }}>🛍️ GlowKraftee</h1>
-        <p style={{ color: '#6b7280', fontSize: '15px', marginBottom: '30px' }}>
+        <h1 style={{ color: '#111827', fontSize: '22px', marginBottom: '10px', fontWeight: 'bold' }}>
+          🛍️ GlowKraftee
+        </h1>
+        <p style={{ color: '#4b5563', fontSize: '15px', marginBottom: '30px', fontStyle: 'italic' }}>
           Where Artisans Glow Relations with Love & Care - Opening Soon
         </p>
         
         <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '20px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '14px' }}>
-            <span>Test Artisan Order Summary</span>
+            <span>Test Order Summary</span>
             <span style={{ marginLeft: 'auto', fontWeight: 'bold' }}>Rs. 1,500.00</span>
           </div>
         </div>
