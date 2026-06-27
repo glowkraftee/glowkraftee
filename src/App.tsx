@@ -1,46 +1,17 @@
-import React, { useEffect } from 'react';
-
-interface Window {
-  safepay?: {
-    Button: {
-      render: (config: any, containerSelector: string) => void;
-    };
-  };
-}
-
-declare const window: Window;
+import React from 'react';
 
 function App() {
-  useEffect(() => {
-    // Check if Safepay is loaded from index.html
-    if (window.safepay) {
-      window.safepay.Button.render({
-        env: 'sandbox',
-        amount: 1500.00,
-        currency: 'PKR',
-        client: {
-          sandbox: "sec_92e7c585-de47-40f7-b59b-83d350290c06",
-          production: ""
-        },
-        payment: function (data: any, actions: any) {
-          return actions.payment.create({
-            transaction: {
-              amount: 1500.00,
-              currency: 'PKR'
-            }
-          });
-        },
-        onCheckout: function(data: any, actions: any) {
-          alert("🎉 Thank you! Your GlowKraftee payment was processed successfully.");
-        },
-        onCancel: function(data: any, actions: any) {
-          console.log("Payment cancelled.");
-        }
-      }, '#safepay-button-container');
-    } else {
-      console.error("Safepay SDK failed to load globally via index.html.");
-    }
-  }, []);
+  const handleCheckout = () => {
+    const baseUrl = "https://sandbox.api.getsafepay.com/components";
+    const clientKey = "sec_92e7c585-de47-40f7-b59b-83d350290c06";
+    const orderId = `ORDER_${Date.now()}`;
+    
+    // Construct the direct payment link
+    const checkoutUrl = `${baseUrl}?env=sandbox&client=${clientKey}&amount=1500&currency=PKR&order_id=${orderId}`;
+    
+    // Redirect securely to the Safepay page
+    window.location.href = checkoutUrl;
+  };
 
   return (
     <div style={{ 
@@ -69,14 +40,32 @@ function App() {
         </p>
         
         <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '20px', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', fontSize: '14px' }}>
             <span>Test Order Summary</span>
             <span style={{ marginLeft: 'auto', fontWeight: 'bold' }}>Rs. 1,500.00</span>
           </div>
         </div>
 
-        {/* The target container where the checkout button will render */}
-        <div id="safepay-button-container" style={{ minHeight: '50px', marginTop: '20px' }}></div>
+        <button 
+          onClick={handleCheckout}
+          style={{
+            width: '100%',
+            backgroundColor: '#0066cc',
+            color: '#ffffff',
+            padding: '14px 24px',
+            borderRadius: '8px',
+            border: 'none',
+            fontSize: '16px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+            boxShadow: '0 2px 4px rgba(0, 102, 204, 0.2)'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0052a3'}
+          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#0066cc'}
+        >
+          Proceed to Secure Checkout
+        </button>
       </div>
     </div>
   );
