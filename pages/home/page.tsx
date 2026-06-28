@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function Home() {
-  const [showCheckout, setShowCheckout] = useState(false);
-
   const handleBuyNow = () => {
-    setShowCheckout(true);
     document.getElementById('checkout-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -111,7 +108,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Product Card 3 (Matches your checkout setup) */}
+          {/* Product Card 3 */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col border-2 border-amber-600/40">
             <div className="h-72 bg-gray-200 flex items-center justify-center text-gray-400">
               <span className="text-4xl">🖼️</span>
