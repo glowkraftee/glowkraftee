@@ -13,7 +13,7 @@ export default defineConfig({
     },
   },
   css: {
-    postfix: {
+    postcss: {
       plugins: [tailwindcss(), autoprefixer()],
     },
   },
