@@ -10,6 +10,9 @@ export default defineConfig({
       'src': path.resolve(__dirname, './src')
     },
   },
+  css: {
+    postcss: './postcss.config.js'
+  },
   build: {
     outDir: 'dist',
   }
