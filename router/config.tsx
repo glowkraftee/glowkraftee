@@ -10,7 +10,7 @@ import CartPage from "../pages/cart/page";
 import CheckoutPage from "../pages/checkout/page";
 import OrdersPage from "../pages/orders/page";
 
-const routes: RouteObject[] = [
+export const routes: RouteObject[] = [
   {
     path: "/",
     element: <Home />,
@@ -52,5 +52,3 @@ const routes: RouteObject[] = [
     element: <NotFound />,
   },
 ];
-
-export default routes;
