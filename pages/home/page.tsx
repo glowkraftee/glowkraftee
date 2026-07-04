@@ -1,8 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+  const navigate = useNavigate();
+
   const handleBuyNow = () => {
-    document.getElementById('checkout-section')?.scrollIntoView({ behavior: 'smooth' });
+    const target = document.getElementById('checkout-section');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -15,16 +21,17 @@ export default function Home() {
             <span className="text-2xl">🛍️</span>
             <span className="text-xl font-bold tracking-tight text-gray-900">GlowKraftee</span>
           </div>
+          
           <div className="hidden md:flex space-x-8 font-medium text-gray-600">
             <a href="#" className="text-amber-600">Home</a>
             <a href="#shop" className="hover:text-amber-600 transition">Shop Collections</a>
             <a href="#" className="hover:text-amber-600 transition">Our Story</a>
             <a href="#" className="hover:text-amber-600 transition">Track Order</a>
           </div>
-          <div className="flex items-center space-x-4">
-            <button className="relative text-gray-600 hover:text-amber-600">
+          
+         <button onClick={() => navigate('/cart')} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
               <span className="text-xl">🛒</span>
-              <span className="absolute -top-2 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">1</span>
+              <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">1</span>
             </button>
           </div>
         </div>
@@ -109,13 +116,13 @@ export default function Home() {
           </div>
 
           {/* Product Card 3 */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col border-2 border-amber-600/40">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col border-amber-600/40">
             <div className="h-72 bg-gray-200 flex items-center justify-center text-gray-400">
               <span className="text-4xl">🖼️</span>
             </div>
             <div className="p-5 flex-1 flex flex-col justify-between">
               <div>
-                <div className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-medium mb-2">Popular</div>
+                <span className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-medium mb-2">Popular</span>
                 <h3 className="font-semibold text-lg text-gray-900 mb-1">Handcrafted Premium Utility Item</h3>
                 <div className="text-amber-500 text-sm mb-3">★★★★★ <span className="text-gray-500 text-xs ml-1">(8 reviews)</span></div>
               </div>
@@ -150,7 +157,10 @@ export default function Home() {
             </div>
           </div>
 
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition duration-200">
+          <button 
+            onClick={() => navigate('/checkout')} 
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition duration-200"
+          >
             Proceed to Secure Checkout
           </button>
         </div>
