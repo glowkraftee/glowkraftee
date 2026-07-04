@@ -37,14 +37,12 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* HERO BANNER SECTION */}
-      <header className="relative bg-amber-50/40 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+     {/* HERO BANNER SECTION */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
             Authentic Heritage. Modern Elegance.
           </h1>
           <p className="text-lg sm:text-xl italic text-amber-700 font-medium mb-6">
-            Where Artisans Glow Relations with Love & Care.
+            Where Artisans Glow Relations with Love and Care.
           </p>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto mb-8">
             Bring the timeless soul of traditional Pakistani craftsmanship into your modern home. Handcrafted by master artisans, curated with precision, and shipped directly to your doorstep in the USA.
