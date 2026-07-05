@@ -11,31 +11,34 @@ export default function Home() {
     }
   };
 
-  return (
+return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
-      
+
       {/* NAVIGATION HEADER */}
       <nav className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          
           <div className="flex items-center gap-2">
             <span className="text-2xl">🛍️</span>
             <span className="text-xl font-bold tracking-tight text-gray-900">GlowKraftee</span>
           </div>
-          
+
           <div className="hidden md:flex space-x-8 font-medium text-gray-600">
             <a href="#" className="text-amber-600">Home</a>
             <a href="#shop" className="hover:text-amber-600 transition">Shop Collections</a>
             <a href="#" className="hover:text-amber-600 transition">Our Story</a>
             <a href="#" className="hover:text-amber-600 transition">Track Order</a>
           </div>
-          
-         <button onClick={() => navigate('/cart')} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
-              <span className="text-xl">🛒</span>
-              <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">1</span>
-            </button>
-          </div>
-        </div>
-      </nav>
+
+          <button onClick={() => navigate('/cart')} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
+            <span className="text-xl">🛒</span>
+            <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">1</span>
+          </button>
+    </div>
+  </div>
+</nav>
+
+      {/* HERO BANNER SECTION */}
 
      {/* HERO BANNER SECTION */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
