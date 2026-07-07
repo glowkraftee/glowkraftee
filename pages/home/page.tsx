@@ -1,13 +1,14 @@
 import React from 'react';
-
+import { Link, useNavigate } from 'react-router-dom';
 export default function Home() {
-const router = useRouter();
+const navigate = useNavigate();
 
-     const target = document.getElementById('checkout-section');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+const handleBuyNow = () => {
+  const target = document.getElementById('checkout-section');
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
@@ -20,10 +21,10 @@ const router = useRouter();
       </div>
 
           <div className="hidden md:flex space-x-8 font-medium text-gray-600">
-            <a href="#" className="text-amber-600">Home</a>
-            <a href="#shop" className="hover:text-amber-600 transition">Shop Collections</a>
-            <a href="#" className="hover:text-amber-600 transition">Our Story</a>
-            <a href="#" className="hover:text-amber-600 transition">Track Order</a>
+           <Link to="/" className="text-amber-600">Home</Link>
+<Link to="/products" className="hover:text-amber-600 transition">Shop Collections</Link>
+<Link to="/about" className="hover:text-amber-600 transition">Our Story</Link>
+<Link to="/orders" className="hover:text-amber-600 transition">Track Order</Link>
           </div>
 
           <button onClick={() => window.location.href = '/cart'} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
@@ -34,12 +35,13 @@ const router = useRouter();
   </div>
 </nav>
 
-      {/* HERO BANNER SECTION */}
-
-     {/* HERO BANNER SECTION */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
-            Authentic Heritage. Modern Elegance.
-          </h1>
+      
+    {/* HERO BANNER SECTION */}
+<header className="relative bg-amber-50/40 py-20 px-4 sm:px-6 lg:px-8">
+  <div className="max-w-4xl mx-auto text-center">
+    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+      Authentic Heritage. Modern Elegance.
+    </h1>
           <p className="text-lg sm:text-xl italic text-amber-700 font-medium mb-6">
             Where Artisans Glow Relations with Love and Care.
           </p>
