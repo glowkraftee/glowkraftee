@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../../hooks/useCart';
 export default function Home() {
 const navigate = useNavigate();
 
-const handleBuyNow = () => {
+const { addItem, totalItems } = useCart();
+
+const handleBuyNow = (product: { productId: number; name: string; price: number; image: string }) => {
+  addItem({ ...product, quantity: 1 });
   const target = document.getElementById('checkout-section');
   if (target) {
     target.scrollIntoView({ behavior: 'smooth' });
@@ -29,7 +33,7 @@ const handleBuyNow = () => {
 
           <button onClick={() => window.location.href = '/cart'} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
             <span className="text-xl">🛒</span>
-            <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">1</span>
+            <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">{totalItems}</span>
           </button>
     </div>
   </div>
@@ -92,7 +96,7 @@ const handleBuyNow = () => {
               </div>
               <div className="flex items-center justify-between mt-4">
                 <span className="text-xl font-bold text-gray-900">$45.00</span>
-                <button onClick={handleBuyNow} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
+                <button onClick={() => handleBuyNow({ productId: 1, name: 'Handcrafted Premium Macrame Swing', price: 45, image: '' })} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
               </div>
             </div>
           </div>
@@ -109,7 +113,7 @@ const handleBuyNow = () => {
               </div>
               <div className="flex items-center justify-between mt-4">
                 <span className="text-xl font-bold text-gray-900">$65.00</span>
-                <button onClick={handleBuyNow} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
+                <button onClick={() => handleBuyNow({ productId: 2, name: 'Heritage Collection Decorative Accent', price: 65, image: '' })} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
               </div>
             </div>
           </div>
@@ -127,7 +131,7 @@ const handleBuyNow = () => {
               </div>
               <div className="flex items-center justify-between mt-4">
                 <span className="text-xl font-bold text-gray-900">$15.00</span>
-                <button onClick={handleBuyNow} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
+                <button onClick={() => handleBuyNow({ productId: 3, name: 'Handcrafted Premium Utility Item', price: 15, image: '' })} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
               </div>
             </div>
           </div>
