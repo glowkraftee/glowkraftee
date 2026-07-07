@@ -13,8 +13,11 @@ const router = useRouter();
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
       {/* NAVIGATION HEADER */}
       <nav className="bg-white shadow-sm sticky top-0 z-50">
-            <span className="text-xl font-bold tracking-tight text-gray-900">GlowKraftee</span>
-          </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex justify-between h-16 items-center">
+      <div className="flex-shrink-0">
+        <span className="text-xl font-bold tracking-tight text-gray-900">GlowKraftee</span>
+      </div>
 
           <div className="hidden md:flex space-x-8 font-medium text-gray-600">
             <a href="#" className="text-amber-600">Home</a>
