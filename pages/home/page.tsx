@@ -1,8 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const navigate = useNavigate();
+const router = useRouter();
 
   const handleBuyNow = () => {
     const target = document.getElementById('checkout-section');
@@ -25,7 +25,7 @@ export default function Home() {
             <a href="#" className="hover:text-amber-600 transition">Track Order</a>
           </div>
 
-          <button onClick={() => navigate('/cart')} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
+          <button onClick={() => router.push('/cart')} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
             <span className="text-xl">🛒</span>
             <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">1</span>
           </button>
