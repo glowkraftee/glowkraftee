@@ -1,11 +1,9 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function Home() {
 const router = useRouter();
 
-  const handleBuyNow = () => {
-    const target = document.getElementById('checkout-section');
+     const target = document.getElementById('checkout-section');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
@@ -25,7 +23,7 @@ const router = useRouter();
             <a href="#" className="hover:text-amber-600 transition">Track Order</a>
           </div>
 
-          <button onClick={() => router.push('/cart')} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
+          <button onClick={() => window.location.href = '/cart'} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
             <span className="text-xl">🛒</span>
             <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">1</span>
           </button>
