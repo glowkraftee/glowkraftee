@@ -1,5 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -10,8 +10,6 @@ export default function Home() {
       target.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
 
       {/* NAVIGATION HEADER */}
