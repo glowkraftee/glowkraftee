@@ -88,63 +88,56 @@ export default function Checkout() {
       return;
     }
 
-    try {
+   try {
       // Build recipient JSONB
       const recipient = {
         name: `${formData.firstName.trim()} ${formData.lastName.trim()}`.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
-        country: formData.country,
+        country: formData.country.trim(),
         state: formData.state.trim(),
         city: formData.city.trim(),
         address: formData.address.trim() + (formData.apt.trim() ? `, Apt ${formData.apt.trim()}` : ''),
         zip: formData.zip.trim(),
       };
-
-      // Create order header
-      const { data: orderData, error: orderError } = await supabase
-        .from('order_headers')
-        .insert({
-          currency: 'USD',
-          payment_provider: 'manual',
-          status: 'pending_payment',
-          subtotal_items: subtotal,
-          shipping_total: shippingEstimate,
-          tax_total: taxEstimate,
-          recipient,
-          customer_notes: '',
-        })
-        .select('id')
-        .single();
-
-      if (orderError) throw orderError;
-
-      // Create order items
-      const orderItems = items.map((item) => ({
-        order_id: orderData.id,
-        product_id: String(item.productId),
+ 
+      // Build line items for the checkout session
+      const checkoutItems = items.map((item) => ({
         product_name: item.name,
         quantity: item.quantity,
         unit_price: item.price,
-        final_price: item.price,
-        subtotal: item.price * item.quantity,
+        sku_label: String(item.productId),
       }));
-
-      const { error: itemsError } = await supabase
-        .from('order_items')
-        .insert(orderItems);
-
-      if (itemsError) throw itemsError;
-
-      setOrderNumber(String(orderData.id));
-      clearCart();
-      setSubmitStatus('success');
+ 
+      // Call the create-checkout-session Edge Function.
+      // This writes the pending order to Supabase AND creates the SafePay
+      // payment session, returning a hosted checkout URL to redirect to.
+      const { data, error: fnError } = await supabase.functions.invoke(
+        'create-checkout-session',
+        {
+          body: {
+            recipient,
+            items: checkoutItems,
+            currency: 'USD',
+            shipping_total: shippingEstimate,
+            tax_total: taxEstimate,
+          },
+        }
+      );
+ 
+      if (fnError) throw fnError;
+      if (!data?.checkoutUrl) throw new Error('No checkout URL returned');
+ 
+      // Send the customer to SafePay's hosted payment page.
+      // Do NOT clear the cart or mark success here — that happens after
+      // SafePay confirms payment and the customer lands on /order-confirmation.
+      window.location.href = data.checkoutUrl;
     } catch (err) {
-      console.error('Order creation failed:', err);
+      console.error('Checkout failed:', err);
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 5000);
     }
-  };
+  }; 
 
   // If cart is empty and not in success state, redirect
   if (items.length === 0 && submitStatus !== 'success') {
