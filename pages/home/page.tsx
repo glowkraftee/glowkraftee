@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart';
+import { supabase } from '@/lib/supabase';
+
+interface LiveProduct {
+  id: number;
+  name: string;
+  price: number;
+  media: { url: string; type: string }[] | null;
+}
+
 export default function Home() {
 const navigate = useNavigate();
 
@@ -13,6 +22,27 @@ const handleBuyNow = (product: { productId: number; name: string; price: number;
     target.scrollIntoView({ behavior: 'smooth' });
   }
 };
+
+const [products, setProducts] = useState<LiveProduct[]>([]);
+const [productsLoading, setProductsLoading] = useState(true);
+const [productsError, setProductsError] = useState(false);
+
+useEffect(() => {
+  supabase
+    .from('product_items')
+    .select('id, name, price, media')
+    .eq('status', 'active')
+    .order('id', { ascending: false })
+    .limit(6)
+    .then(({ data, error: err }) => {
+      if (err) {
+        setProductsError(true);
+      } else if (data) {
+        setProducts(data as LiveProduct[]);
+      }
+    })
+    .finally(() => setProductsLoading(false));
+}, []);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
@@ -82,60 +112,81 @@ const handleBuyNow = (product: { productId: number; name: string; price: number;
       {/* MAIN PRODUCT CATALOG GRID */}
       <main id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">The Artisan Collection</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Product Card 1 */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-            <div className="h-72 bg-gray-200 flex items-center justify-center text-gray-400">
-              <span className="text-4xl">🖼️</span>
-            </div>
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <div>
-                <h3 className="font-semibold text-lg text-gray-900 mb-1">Handcrafted Premium Macrame Swing</h3>
-                <div className="text-amber-500 text-sm mb-3">★★★★★ <span className="text-gray-500 text-xs ml-1">(14 reviews)</span></div>
-              </div>
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-xl font-bold text-gray-900">$45.00</span>
-                <button onClick={() => handleBuyNow({ productId: 1, name: 'Handcrafted Premium Macrame Swing', price: 45, image: '' })} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
-              </div>
-            </div>
-          </div>
 
-          {/* Product Card 2 */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-            <div className="h-72 bg-gray-200 flex items-center justify-center text-gray-400">
-              <span className="text-4xl">🖼️</span>
-            </div>
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <div>
-                <h3 className="font-semibold text-lg text-gray-900 mb-1">Heritage Collection Decorative Accent</h3>
-                <div className="text-amber-500 text-sm mb-3">★★★★★ <span className="text-gray-500 text-xs ml-1">(22 reviews)</span></div>
+        {productsLoading && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+                <div className="h-72 bg-gray-200" />
+                <div className="p-5 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4" />
+                  <div className="h-4 bg-gray-200 rounded w-1/4" />
+                </div>
               </div>
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-xl font-bold text-gray-900">$65.00</span>
-                <button onClick={() => handleBuyNow({ productId: 2, name: 'Heritage Collection Decorative Accent', price: 65, image: '' })} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
-              </div>
-            </div>
+            ))}
           </div>
+        )}
 
-          {/* Product Card 3 */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col border-amber-600/40">
-            <div className="h-72 bg-gray-200 flex items-center justify-center text-gray-400">
-              <span className="text-4xl">🖼️</span>
-            </div>
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <div>
-                <span className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded font-medium mb-2">Popular</span>
-                <h3 className="font-semibold text-lg text-gray-900 mb-1">Handcrafted Premium Utility Item</h3>
-                <div className="text-amber-500 text-sm mb-3">★★★★★ <span className="text-gray-500 text-xs ml-1">(8 reviews)</span></div>
-              </div>
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-xl font-bold text-gray-900">$15.00</span>
-                <button onClick={() => handleBuyNow({ productId: 3, name: 'Handcrafted Premium Utility Item', price: 15, image: '' })} className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition">Buy Now</button>
-              </div>
-            </div>
+        {!productsLoading && productsError && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 mb-4">Unable to load products right now.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-5 py-2.5 rounded transition"
+            >
+              Retry
+            </button>
           </div>
-        </div>
+        )}
+
+        {!productsLoading && !productsError && products.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">New pieces are on their way — check back soon.</p>
+          </div>
+        )}
+
+        {!productsLoading && !productsError && products.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {products.map((product) => {
+              const imageUrl = product.media?.[0]?.url || '';
+              return (
+                <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                  <Link to={`/product/${product.id}`} className="h-72 bg-gray-200 flex items-center justify-center text-gray-400 overflow-hidden">
+                    {imageUrl ? (
+                      <img src={imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-4xl">🖼️</span>
+                    )}
+                  </Link>
+                  <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                      <Link to={`/product/${product.id}`}>
+                        <h3 className="font-semibold text-lg text-gray-900 mb-1 hover:text-amber-700 transition">{product.name}</h3>
+                      </Link>
+                    </div>
+                    <div className="flex items-center justify-between mt-4">
+                      <span className="text-xl font-bold text-gray-900">${Number(product.price).toFixed(2)}</span>
+                      <button
+                        onClick={() => handleBuyNow({ productId: product.id, name: product.name, price: Number(product.price), image: imageUrl })}
+                        className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition"
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {!productsLoading && !productsError && products.length > 0 && (
+          <div className="text-center mt-10">
+            <Link to="/products" className="text-amber-700 hover:text-amber-800 font-medium underline underline-offset-4">
+              View All Products →
+            </Link>
+          </div>
+        )}
       </main>
 
       {/* LIVE SECURE CHECKOUT INTERFACES */}
