@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode, createElement } from 'react';
 
 export interface CartItem {
   productId: number;
@@ -23,11 +23,25 @@ function saveCart(items: CartItem[]) {
   localStorage.setItem(CART_KEY, JSON.stringify(items));
 }
 
-export function useCart() {
+interface CartContextValue {
+  items: CartItem[];
+  cartOpen: boolean;
+  setCartOpen: (open: boolean) => void;
+  addItem: (item: CartItem) => void;
+  removeItem: (productId: number) => void;
+  updateQuantity: (productId: number, quantity: number) => void;
+  clearCart: () => void;
+  totalItems: number;
+  subtotal: number;
+}
+
+const CartContext = createContext<CartContextValue | null>(null);
+
+export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(loadCart);
   const [cartOpen, setCartOpen] = useState(false);
 
-  // Listen for external cart changes
+  // Listen for external cart changes (e.g. other tabs)
   useEffect(() => {
     const handler = () => setItems(loadCart());
     window.addEventListener('cart-updated', handler);
@@ -81,7 +95,7 @@ export function useCart() {
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
-  return {
+  const value: CartContextValue = {
     items,
     cartOpen,
     setCartOpen,
@@ -92,4 +106,14 @@ export function useCart() {
     totalItems,
     subtotal,
   };
+
+  return createElement(CartContext.Provider, { value }, children);
+}
+
+export function useCart(): CartContextValue {
+  const ctx = useContext(CartContext);
+  if (!ctx) {
+    throw new Error('useCart must be used within a <CartProvider>. Wrap your app in <CartProvider> (see src/App.tsx).');
+  }
+  return ctx;
 }
