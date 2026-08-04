@@ -220,14 +220,6 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* FLOATING LIVE CHAT BOT BADGE */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button className="bg-amber-900 text-white px-4 py-3 rounded-full shadow-2xl flex items-center gap-2 hover:bg-amber-950 transition">
-          <span className="font-medium text-sm">💬 Talk with Us</span>
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-        </button>
-      </div>
-
     </div>
   );
 }
