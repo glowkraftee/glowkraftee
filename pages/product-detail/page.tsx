@@ -10,6 +10,7 @@ interface Product {
   name: string;
   price: number;
   description: string | null;
+  material: string | null;
   media: { url: string; type: string }[];
   category_id: number;
   discount_enabled: boolean;
@@ -192,7 +193,7 @@ export default function ProductDetailPage() {
     : null;
   const content = productDescriptions[product.id] || {
     details: product.description || 'A beautifully handcrafted piece from our artisan workshop in Pakistan. Each item is made with care using traditional techniques.',
-    materials: 'Premium natural materials sourced locally in Pakistan. Crafted using traditional techniques passed down through generations.',
+    materials: product.material || 'Premium natural materials sourced locally in Pakistan. Crafted using traditional techniques passed down through generations.',
     shipping: 'Dispatched from our Lahore workshop within 2-3 business days. International shipping to the United States typically takes 7-12 business days via tracked courier (DHL or FedEx). A tracking number is emailed to you as soon as your order ships.',
   };
   const tabContent: Record<number, string> = {
