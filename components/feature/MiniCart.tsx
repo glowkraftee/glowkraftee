@@ -1,9 +1,17 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '@/hooks/useCart';
 
 export default function MiniCart() {
   const { items, cartOpen, setCartOpen, removeItem, updateQuantity, totalItems, subtotal } = useCart();
+  const location = useLocation();
+
+  // Close the drawer automatically whenever the route changes,
+  // so it never stays open and overlaps content on the new page.
+  useEffect(() => {
+    setCartOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   // Lock body scroll when drawer is open
   useEffect(() => {
