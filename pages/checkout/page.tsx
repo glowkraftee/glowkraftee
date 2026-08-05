@@ -286,7 +286,7 @@ export default function Checkout() {
                     {/* Honeypot — anti-spam */}
                     <input
                       type="text"
-                      name="company_alt"
+                      name="gk_hidden_check_1a2b"
                       tabIndex={-1}
                       autoComplete="off"
                       aria-hidden="true"
