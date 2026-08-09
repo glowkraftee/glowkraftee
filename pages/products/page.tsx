@@ -30,7 +30,7 @@ type SortOption = 'newest' | 'price-asc' | 'price-desc';
 
 export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategorySlug = searchParams.get('category') || '';
+  const activeCategoryId = searchParams.get('category') ? Number(searchParams.get('category')) : null;
   const searchQuery = searchParams.get('q') || '';
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -39,21 +39,6 @@ export default function ProductsPage() {
   const [error, setError] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [searchInput, setSearchInput] = useState(searchQuery);
-
-  // Category slug → id mapping
-  const slugToId: Record<string, number> = {
-    'home-decor': 1,
-    'personalized-gifts': 2,
-    accessories: 3,
-  };
-
-  const idToSlug: Record<number, string> = {
-    1: 'home-decor',
-    2: 'personalized-gifts',
-    3: 'accessories',
-  };
-
-  const activeCategoryId = slugToId[activeCategorySlug] || null;
 
   // Fetch categories
   useEffect(() => {
@@ -104,11 +89,11 @@ export default function ProductsPage() {
       .finally(() => setLoading(false));
   }, [activeCategoryId, searchQuery, sortBy]);
 
-  const handleCategoryClick = (slug: string) => {
-    if (slug === activeCategorySlug) {
+  const handleCategoryClick = (catId: number) => {
+    if (catId === activeCategoryId) {
       searchParams.delete('category');
     } else {
-      searchParams.set('category', slug);
+      searchParams.set('category', String(catId));
     }
     setSearchParams(searchParams);
   };
@@ -166,7 +151,7 @@ export default function ProductsPage() {
                     setSearchParams(searchParams);
                   }}
                   className={`whitespace-nowrap text-xs md:text-sm font-medium px-4 py-2 rounded-full transition-colors cursor-pointer ${
-                    !activeCategorySlug
+                    !activeCategoryId
                       ? 'bg-primary-500 text-background-50'
                       : 'text-foreground-600 hover:text-foreground-950 hover:bg-background-200'
                   }`}
@@ -174,12 +159,11 @@ export default function ProductsPage() {
                   All
                 </button>
                 {categories.map((cat) => {
-                  const slug = idToSlug[cat.id];
-                  const isActive = activeCategorySlug === slug;
+                  const isActive = activeCategoryId === cat.id;
                   return (
                     <button
                       key={cat.id}
-                      onClick={() => handleCategoryClick(slug)}
+                      onClick={() => handleCategoryClick(cat.id)}
                       className={`whitespace-nowrap text-xs md:text-sm font-medium px-4 py-2 rounded-full transition-colors cursor-pointer ${
                         isActive
                           ? 'bg-primary-500 text-background-50'
