@@ -30,7 +30,7 @@ type SortOption = 'newest' | 'price-asc' | 'price-desc';
 
 export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategoryId = searchParams.get('category') ? Number(searchParams.get('category')) : null;
+  const rawCategory = searchParams.get('category');
   const searchQuery = searchParams.get('q') || '';
 
   const [products, setProducts] = useState<Product[]>([]);
@@ -39,6 +39,16 @@ export default function ProductsPage() {
   const [error, setError] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [searchInput, setSearchInput] = useState(searchQuery);
+
+  // Category links use the numeric id (?category=3). Older links used a name
+  // slug (?category=home-decor); match those by name so they still work.
+  const toSlug = (name: string) => name.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const activeCategoryId: number | null = !rawCategory
+    ? null
+    : /^\d+$/.test(rawCategory)
+      ? Number(rawCategory)
+      : categories.find((c) => toSlug(c.name) === rawCategory.toLowerCase())?.id ?? null;
+  const waitingForSlug = !!rawCategory && !/^\d+$/.test(rawCategory) && categories.length === 0;
 
   // Fetch categories
   useEffect(() => {
@@ -55,6 +65,7 @@ export default function ProductsPage() {
   useEffect(() => {
     setLoading(true);
     setError(false);
+    if (waitingForSlug) return; // wait for categories before resolving an old-style link
 
     let query = supabase
       .from('product_items')
@@ -87,7 +98,7 @@ export default function ProductsPage() {
         }
       })
       .finally(() => setLoading(false));
-  }, [activeCategoryId, searchQuery, sortBy]);
+  }, [activeCategoryId, searchQuery, sortBy, waitingForSlug]);
 
   const handleCategoryClick = (catId: number) => {
     if (catId === activeCategoryId) {

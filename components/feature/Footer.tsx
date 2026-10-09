@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { CONTACT_EMAIL } from '@/lib/siteConfig';
@@ -12,6 +12,19 @@ export default function Footer() {
   const [honeypot, setHoneypot] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<NewsletterStatus>('idle');
   const [newsletterError, setNewsletterError] = useState('');
+  const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+
+  // Same categories (and same links) as the Shop page filter bar.
+  useEffect(() => {
+    supabase
+      .from('product_categories')
+      .select('id, name, sort_order')
+      .order('sort_order')
+      .limit(5)
+      .then(({ data }) => {
+        if (data) setCategories(data);
+      });
+  }, []);
 
   const handleNewsletterSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -121,18 +134,18 @@ export default function Footer() {
               Explore
             </h4>
             <nav className="flex flex-col gap-3">
-              <Link to="/products" className="text-sm text-foreground-300 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
+              <Link onClick={() => window.scrollTo({ top: 0 })} to="/products" className="text-sm text-foreground-300 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
                 Shop All
               </Link>
-              <Link to="/products?category=home-decor" className="text-sm text-foreground-300 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
-                Home Decor
-              </Link>
-              <Link to="/products?category=personalized-gifts" className="text-sm text-foreground-300 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
-                Personalized Gifts
-              </Link>
-              <Link to="/products?category=accessories" className="text-sm text-foreground-300 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
-                Accessories
-              </Link>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/products?category=${cat.id}`}
+                  className="text-sm text-foreground-300 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4"
+                >
+                  {cat.name}
+                </Link>
+              ))}
             </nav>
           </div>
 
@@ -175,7 +188,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} GlowKraftee. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            <Link to="/faq" className="text-xs text-foreground-400 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
+            <Link onClick={() => window.scrollTo({ top: 0 })} to="/faq" className="text-xs text-foreground-400 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
               Shipping Policy
             </Link>
             <a href="#" className="text-xs text-foreground-400 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
