@@ -10,7 +10,13 @@ interface LiveProduct {
   name: string;
   price: number;
   media: { url: string; type: string }[] | null;
+  discount_enabled?: boolean | null;
+  discount_price?: number | null;
 }
+
+// Price the customer actually pays (sale price when a discount is on).
+const salePrice = (p: LiveProduct) =>
+  p.discount_enabled && p.discount_price != null ? Number(p.discount_price) : Number(p.price);
 
 export default function Home() {
 const navigate = useNavigate();
@@ -29,7 +35,7 @@ const [productsError, setProductsError] = useState(false);
 useEffect(() => {
   supabase
     .from('product_items')
-    .select('id, name, price, media')
+    .select('id, name, price, media, discount_enabled, discount_price')
     .eq('status', 'active')
     .order('id', { ascending: false })
     .limit(6)
@@ -143,9 +149,9 @@ useEffect(() => {
                       </Link>
                     </div>
                     <div className="flex items-center justify-between mt-4">
-                      <span className="text-xl font-bold text-gray-900">${Number(product.price).toFixed(2)}</span>
+                      <span className="text-xl font-bold text-gray-900">${salePrice(product).toFixed(2)}</span>
                       <button
-                        onClick={() => handleBuyNow({ productId: product.id, name: product.name, price: Number(product.price), image: imageUrl })}
+                        onClick={() => handleBuyNow({ productId: product.id, name: product.name, price: salePrice(product), image: imageUrl })}
                         className="bg-amber-700 hover:bg-amber-800 text-white text-sm px-4 py-2 rounded transition"
                       >
                         Buy Now
