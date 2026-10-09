@@ -16,9 +16,15 @@ Follow these rules every time:
    For tall images such as book covers or posters, also make a **square** version
    (whole image centred on a matching background, ~1000×1000) and use that as the
    first photo, so the title is never cut off. Check the result on the live site.
-3. **Photos:** take up to 8 per listing. Prefer copying them into the site
-   (`public/images/...` or Supabase storage) over hotlinking Etsy, because Etsy
-   URLs break if the listing is removed.
+3. **Photos and videos must be owned by the website — never hotlink Etsy.**
+   The owner requires that changes or deletions on Etsy never affect
+   glowkraftee.com. Take up to 8 photos (and any listing video) per listing and
+   copy every file into Supabase storage (`product-images/etsy-import/<product id>/`)
+   or `public/images/...`; `product_items.media` must not contain any
+   `etsystatic.com` URL. The sandbox cannot reach Etsy directly; a short-lived,
+   token-protected Edge Function (downloads from i.etsystatic.com only, uploads
+   with the service role, then gets disabled) worked well. Afterwards verify with
+   SQL that no media URL contains `etsystatic` and that images load on the live site.
 4. **Description:** copy the Etsy text, but remove "Free Delivery at your
    doorstep" and "All taxes pre-paid and included in the price" (the website
    charges shipping and tax). Keep "GlowKraftee Artisans made it with care and
