@@ -59,10 +59,12 @@ export default function ProductsPage() {
   useEffect(() => {
     supabase
       .from('product_categories')
-      .select('id, name, sort_order')
+      // Only categories that have at least one active product (empty ones are hidden).
+      .select('id, name, sort_order, product_items!inner(id)')
+      .eq('product_items.status', 'active')
       .order('sort_order')
       .then(({ data }) => {
-        if (data) setCategories(data);
+        if (data) setCategories(data.map(({ id, name, sort_order }) => ({ id, name, sort_order })));
       });
   }, []);
 
