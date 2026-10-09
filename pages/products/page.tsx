@@ -50,6 +50,11 @@ export default function ProductsPage() {
       : categories.find((c) => toSlug(c.name) === rawCategory.toLowerCase())?.id ?? null;
   const waitingForSlug = !!rawCategory && !/^\d+$/.test(rawCategory) && categories.length === 0;
 
+  // Start at the top whenever the category changes (e.g. from a footer link).
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [rawCategory]);
+
   // Fetch categories
   useEffect(() => {
     supabase
