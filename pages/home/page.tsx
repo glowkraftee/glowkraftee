@@ -137,7 +137,7 @@ useEffect(() => {
                 <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
                   <Link to={`/product/${product.id}`} className="h-72 bg-gray-200 flex items-center justify-center text-gray-400 overflow-hidden">
                     {imageUrl ? (
-                      <img src={imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                      <img src={imageUrl} alt={product.name} className="w-full h-full object-contain bg-background-100" />
                     ) : (
                       <span className="text-4xl">🖼️</span>
                     )}

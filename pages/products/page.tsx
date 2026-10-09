@@ -336,7 +336,7 @@ export default function ProductsPage() {
                         <img
                           src={imageUrl}
                           alt={product.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-contain bg-background-100 transition-transform duration-500 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-foreground-950/0 group-hover:bg-foreground-950/10 transition-colors duration-300 flex items-center justify-center">
                           <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-background-50 text-foreground-950 text-xs font-medium px-4 py-2 rounded-full whitespace-nowrap">

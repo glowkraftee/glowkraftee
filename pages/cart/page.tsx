@@ -121,7 +121,7 @@ export default function Cart() {
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="w-full h-full object-cover object-center"
+                            className="w-full h-full object-contain bg-background-100"
                           />
                         </Link>
 

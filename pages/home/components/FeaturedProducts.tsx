@@ -115,7 +115,7 @@ export default function FeaturedProducts() {
                   <img
                     src={imageUrl}
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-contain bg-background-100 transition-transform duration-500 group-hover:scale-105"
                   />
                   {/* Quick view overlay */}
                   <div className="absolute inset-0 bg-foreground-950/0 group-hover:bg-foreground-950/10 transition-colors duration-300 flex items-center justify-center">

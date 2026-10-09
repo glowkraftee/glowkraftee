@@ -244,7 +244,7 @@ export default function ProductDetailPage() {
                   <img
                     src={allImages[activeImage].url}
                     alt={`${product.name} — ${activeImage + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-background-100"
                   />
                 )}
                 {product.discount_enabled && (
@@ -270,7 +270,7 @@ export default function ProductDetailPage() {
                       <img
                         src={img.url}
                         alt={`${product.name} thumbnail ${idx + 1}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain bg-background-100"
                       />
                     </button>
                   ))}
@@ -447,7 +447,7 @@ export default function ProductDetailPage() {
                         <img
                           src={rp.media?.[0]?.url || ''}
                           alt={rp.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-contain bg-background-100 transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
                       <h3 className="font-heading text-base font-medium text-foreground-950 mb-1 text-center">

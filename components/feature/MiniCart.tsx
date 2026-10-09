@@ -109,7 +109,7 @@ export default function MiniCart() {
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-full object-contain bg-background-100"
                       loading="lazy"
                     />
                   </Link>

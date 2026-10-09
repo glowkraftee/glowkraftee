@@ -631,7 +631,7 @@ export default function Checkout() {
                             <img
                               src={item.image}
                               alt={item.name}
-                              className="w-full h-full object-cover object-center"
+                              className="w-full h-full object-contain bg-background-100"
                             />
                           </div>
                           <div className="flex-1 min-w-0">
