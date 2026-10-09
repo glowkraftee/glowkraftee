@@ -1,6 +1,49 @@
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+
+type NewsletterStatus = 'idle' | 'submitting' | 'success' | 'error';
+
+const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<NewsletterStatus>('idle');
+  const [newsletterError, setNewsletterError] = useState('');
+
+  const handleNewsletterSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+
+    // Bots fill the hidden field; pretend success and do nothing.
+    if (honeypot.trim() !== '') {
+      setNewsletterStatus('success');
+      return;
+    }
+    if (!EMAIL_PATTERN.test(trimmed)) {
+      setNewsletterError('Please enter a valid email address.');
+      setNewsletterStatus('error');
+      return;
+    }
+
+    setNewsletterStatus('submitting');
+    const { error } = await supabase
+      .from('newsletter_subscribers')
+      .insert({ email: trimmed, source: 'footer' });
+
+    // 23505 = already subscribed; treat as success.
+    if (error && error.code !== '23505') {
+      console.error('Newsletter signup failed:', error);
+      setNewsletterError('Sorry, something went wrong. Please try again in a moment.');
+      setNewsletterStatus('error');
+      return;
+    }
+
+    setEmail('');
+    setNewsletterStatus('success');
+  };
+
   return (
     <footer className="bg-foreground-950 text-background-50">
       {/* Upper Section */}
@@ -14,38 +57,61 @@ export default function Footer() {
             <p className="text-foreground-300 text-sm leading-relaxed mb-8 max-w-sm">
               Join our newsletter for artisan stories, new collection drops, and exclusive early access.
             </p>
-            <form
-              data-readdy-form
-              id="newsletter-form"
-              action="https://readdy.ai/api/form/d8t08vob9jno5e72bft0"
-              method="POST"
-              className="flex flex-col sm:flex-row gap-3"
-            >
-              <input
-                type="text"
-                name="website_alt"
-                tabIndex={-1}
-                autoComplete="off"
-                aria-hidden="true"
-                className="honeypot-field"
-              />
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="Your email address"
-                className="flex-1 bg-transparent border-b border-foreground-600 text-background-50 text-sm py-3 px-1 placeholder:text-foreground-500 focus:outline-none focus:border-accent-400 transition-colors"
-              />
-              <button
-                type="submit"
-                className="whitespace-nowrap bg-background-50 text-foreground-950 text-sm font-medium px-6 py-3 rounded-full hover:bg-accent-200 transition-colors cursor-pointer flex items-center gap-2 justify-center"
-              >
-                Subscribe
-                <span className="w-4 h-4 flex items-center justify-center">
-                  <i className="ri-arrow-right-line text-sm"></i>
+            {newsletterStatus === 'success' ? (
+              <div className="flex items-start gap-3 text-sm text-background-50" role="status">
+                <span className="w-6 h-6 flex items-center justify-center rounded-full bg-accent-300/20 text-accent-300 shrink-0">
+                  <i className="ri-check-line"></i>
                 </span>
-              </button>
-            </form>
+                <p className="leading-relaxed">
+                  Thank you for subscribing! We'll share artisan stories and new collections with you soon.
+                </p>
+              </div>
+            ) : (
+              <form
+                id="newsletter-form"
+                onSubmit={handleNewsletterSubmit}
+                className="flex flex-col sm:flex-row gap-3"
+                noValidate
+              >
+                <input
+                  type="text"
+                  name="website_alt"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="honeypot-field"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+                <label htmlFor="newsletter-email" className="sr-only">Email address</label>
+                <input
+                  id="newsletter-email"
+                  type="email"
+                  name="email"
+                  required
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (newsletterStatus === 'error') setNewsletterStatus('idle');
+                  }}
+                  placeholder="Your email address"
+                  className="flex-1 bg-transparent border-b border-foreground-600 text-background-50 text-sm py-3 px-1 placeholder:text-foreground-500 focus:outline-none focus:border-accent-400 transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={newsletterStatus === 'submitting'}
+                  className="whitespace-nowrap bg-background-50 text-foreground-950 text-sm font-medium px-6 py-3 rounded-full hover:bg-accent-200 transition-colors cursor-pointer flex items-center gap-2 justify-center disabled:opacity-60 disabled:cursor-wait"
+                >
+                  {newsletterStatus === 'submitting' ? 'Subscribing…' : 'Subscribe'}
+                  <span className="w-4 h-4 flex items-center justify-center">
+                    <i className="ri-arrow-right-line text-sm"></i>
+                  </span>
+                </button>
+              </form>
+            )}
+            {newsletterStatus === 'error' && newsletterError && (
+              <p className="mt-3 text-xs text-red-300" role="alert">{newsletterError}</p>
+            )}
           </div>
 
           {/* Middle — Links */}
