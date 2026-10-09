@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import { CONTACT_EMAIL } from '@/lib/siteConfig';
 
 type NewsletterStatus = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -141,7 +142,7 @@ export default function Footer() {
               Contact
             </h4>
             <div className="space-y-2 text-sm text-foreground-300">
-              <p>hello@glowkraftee.com</p>
+              <p><a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-accent-300 transition-colors">{CONTACT_EMAIL}</a></p>
             </div>
             <div className="mt-8">
               <h4 className="text-xs uppercase tracking-widest text-foreground-400 mb-3 font-label">

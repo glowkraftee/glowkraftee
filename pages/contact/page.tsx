@@ -1,13 +1,14 @@
 import { useState, FormEvent } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
+import { CONTACT_EMAIL } from '@/lib/siteConfig';
+import { supabase } from '@/lib/supabase';
 
 type InquiryType = 'General Inquiry' | 'Custom Design Request' | 'Bulk / Wholesale Order';
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 const CONTACT_FORM_SEO = {
-  submitAddr: 'https://readdy.ai/api/form/d8uip4gu8fvptuidq02g',
   title: 'Contact — GlowKraftee | Reach Out for Handcrafted Artisan Goods',
   description: 'Get in touch with GlowKraftee for support, bulk orders, wholesale inquiries, or custom artisan collaborations. We craft premium handcrafted home decor, leather goods, woodcraft, textiles, and folk art. We would love to hear from you.',
   keywords: 'contact GlowKraftee, handcrafted artisan goods, custom design request, bulk wholesale order, Pakistani crafts, leather goods, woodcraft inquiries',
@@ -89,25 +90,21 @@ export default function Contact() {
       return;
     }
 
-    const body = new URLSearchParams();
-    body.append('fullName', formData.fullName.trim());
-    body.append('email', formData.email.trim());
-    body.append('inquiryType', formData.inquiryType);
-    body.append('subject', formData.subject.trim());
-    body.append('message', formData.message.trim());
-
     try {
-      const res = await fetch(CONTACT_FORM_SEO.submitAddr, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
+      const { error } = await supabase.from('contact_messages').insert({
+        full_name: formData.fullName.trim(),
+        email: formData.email.trim(),
+        inquiry_type: formData.inquiryType,
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
       });
 
-      if (res.ok) {
+      if (!error) {
         setSubmitStatus('success');
         setFormData({ fullName: '', email: '', inquiryType: '', subject: '', message: '', honeypot: '' });
         setTimeout(() => setSubmitStatus('idle'), 5000);
       } else {
+        console.error('Contact form failed:', error);
         setSubmitStatus('error');
         setTimeout(() => setSubmitStatus('idle'), 5000);
       }
@@ -332,7 +329,7 @@ export default function Contact() {
                         <span className="w-5 h-5 flex items-center justify-center shrink-0">
                           <i className="ri-error-warning-line"></i>
                         </span>
-                        <span>Something went wrong. Please try again or email us directly at hello@glowkraftee.com.</span>
+                        <span>Something went wrong. Please try again or email us directly at {CONTACT_EMAIL}.</span>
                       </div>
                     )}
                   </div>
@@ -349,14 +346,14 @@ export default function Contact() {
                       Write to Us
                     </span>
                     <a
-                      href="mailto:hello@glowkraftee.com"
+                      href={`mailto:${CONTACT_EMAIL}`}
                       className="mt-4 flex items-center gap-3 group cursor-pointer"
                     >
                       <span className="shrink-0 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-background-100">
                         <i className="ri-mail-line text-lg md:text-xl text-foreground-600"></i>
                       </span>
                       <span className="font-heading text-xl md:text-2xl font-light text-foreground-950 group-hover:text-primary-500 transition-colors">
-                        hello@glowkraftee.com
+                        {CONTACT_EMAIL}
                       </span>
                     </a>
                     <p className="mt-3 pl-[3.75rem] text-xs md:text-sm text-foreground-400 leading-relaxed">

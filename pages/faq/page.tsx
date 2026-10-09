@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
+import { CONTACT_EMAIL } from '@/lib/siteConfig';
 
 interface FAQItem {
   question: string;
@@ -379,11 +380,11 @@ export default function FAQ() {
                 We are real people who genuinely care about your experience. If your question is not answered here, please reach out — we would love to hear from you.
               </p>
               <a
-                href="mailto:hello@glowkraftee.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="mt-8 inline-flex items-center gap-2.5 bg-background-50 text-foreground-950 text-sm md:text-base font-medium px-8 py-3.5 rounded-full hover:bg-background-100 transition-colors cursor-pointer whitespace-nowrap group"
               >
                 <i className="ri-mail-send-line"></i>
-                hello@glowkraftee.com
+                {CONTACT_EMAIL}
                 <span className="w-4 h-4 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
                   <i className="ri-arrow-right-line"></i>
                 </span>

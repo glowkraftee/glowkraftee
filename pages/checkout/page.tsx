@@ -4,6 +4,7 @@ import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { useCart } from '@/hooks/useCart';
 import { supabase } from '@/lib/supabase';
+import { CONTACT_EMAIL } from '@/lib/siteConfig';
 
 type SubmitStatus = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -248,7 +249,7 @@ export default function Checkout() {
                 )}
                 <p className="text-xs text-foreground-400 leading-relaxed mb-10 max-w-sm mx-auto">
                   A confirmation email will be sent to {formData.email.trim()}. You can also reach us anytime at{' '}
-                  <a href="mailto:hello@glowkraftee.com" className="text-primary-500 hover:text-primary-600 underline underline-offset-4 transition-colors cursor-pointer">hello@glowkraftee.com</a>.
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="text-primary-500 hover:text-primary-600 underline underline-offset-4 transition-colors cursor-pointer">{CONTACT_EMAIL}</a>.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link
@@ -583,7 +584,7 @@ export default function Checkout() {
                           <span className="w-5 h-5 flex items-center justify-center shrink-0">
                             <i className="ri-error-warning-line"></i>
                           </span>
-                          <span>Something went wrong placing your order. Please try again or contact us at hello@glowkraftee.com.</span>
+                          <span>Something went wrong placing your order. Please try again or contact us at {CONTACT_EMAIL}.</span>
                         </div>
                       )}
 

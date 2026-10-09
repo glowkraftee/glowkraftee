@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { supabase } from '@/lib/supabase';
+import { CONTACT_EMAIL } from '@/lib/siteConfig';
 
 interface OrderItem {
   id: number;
@@ -317,7 +318,7 @@ export default function Orders() {
                           {order.status === 'cancelled' ? 'This order has been cancelled.' : 'This order has been refunded.'}
                         </p>
                         <p className="text-xs text-foreground-500 mt-1 leading-relaxed">
-                          If you have questions, please reach out to us at hello@glowkraftee.com.
+                          If you have questions, please reach out to us at {CONTACT_EMAIL}.
                         </p>
                       </div>
                     </div>
@@ -514,8 +515,8 @@ export default function Orders() {
                         </span>
                         <p className="text-[11px] text-accent-800 leading-relaxed">
                           Questions about your order? Reach out at{' '}
-                          <a href="mailto:hello@glowkraftee.com" className="underline decoration-accent-400 underline-offset-2 hover:text-accent-900 transition-colors">
-                            hello@glowkraftee.com
+                          <a href={`mailto:${CONTACT_EMAIL}`} className="underline decoration-accent-400 underline-offset-2 hover:text-accent-900 transition-colors">
+                            {CONTACT_EMAIL}
                           </a>
                         </p>
                       </div>

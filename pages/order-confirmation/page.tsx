@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { useCart } from '@/hooks/useCart';
+import { CONTACT_EMAIL } from '@/lib/siteConfig';
 
 // Safepay sends the customer back here after the hosted payment page.
 // The exact query parameter names depend on the redirect URL configured in
@@ -115,10 +116,10 @@ export default function OrderConfirmation() {
                   <p className="text-xs text-foreground-400 leading-relaxed mt-6 mb-10 max-w-sm mx-auto">
                     A confirmation email will be sent to you shortly. You can also reach us anytime at{' '}
                     <a
-                      href="mailto:hello@glowkraftee.com"
+                      href={`mailto:${CONTACT_EMAIL}`}
                       className="text-primary-500 hover:text-primary-600 underline underline-offset-4 transition-colors cursor-pointer"
                     >
-                      hello@glowkraftee.com
+                      {CONTACT_EMAIL}
                     </a>
                     .
                   </p>
