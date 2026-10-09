@@ -126,7 +126,7 @@ export default function ProductsPage() {
     <div className="min-h-screen bg-background-50">
       <Navbar />
 
-      <main className="pt-20 md:pt-24">
+      <main className="">
         {/* Header */}
         <section className="bg-background-50 border-b border-background-200/70">
           <div className="w-full max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">

@@ -12,115 +12,99 @@ const navLinks = [
   { label: 'Orders', href: '/orders' },
 ];
 
+// One menu for every page: solid cream bar with dark text, so it is readable
+// on both light pages and photo heroes. It sits in the page flow (sticky), so
+// it never covers page content.
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { totalItems, setCartOpen } = useCart();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
 
+  const badge = totalItems > 0 && (
+    <span className="absolute -top-2 -right-2 min-w-[20px] h-5 px-1 flex items-center justify-center bg-foreground-950 text-white text-xs font-bold rounded-full ring-2 ring-background-50">
+      {totalItems > 9 ? '9+' : totalItems}
+    </span>
+  );
+
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-background-50/95 backdrop-blur-md border-b border-background-200/70'
-          : 'bg-transparent'
-      }`}
-    >
-      <div className="w-full px-4 md:px-6">
-        <div className="flex items-center justify-between h-16 md:h-20">
+    <nav className="sticky top-0 z-50 bg-background-50 border-b border-background-200 shadow-sm">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-6">
+        <div className="flex items-center justify-between h-16 md:h-20 gap-4">
           {/* Logo */}
           <Link
             to="/"
-            className="font-heading text-2xl md:text-3xl font-semibold tracking-wide whitespace-nowrap"
-            style={{
-              color: scrolled
-                ? 'oklch(var(--foreground-950))'
-                : 'oklch(1 0 0)',
-              textShadow: scrolled ? 'none' : '0 1px 4px rgba(0,0,0,0.3)',
-            }}
+            className="font-heading text-2xl md:text-3xl font-semibold tracking-wide whitespace-nowrap text-foreground-950"
           >
             GlowKraftee
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`text-sm font-medium whitespace-nowrap transition-colors duration-200 hover:text-accent-400 ${
-                  scrolled
-                    ? 'text-foreground-700'
-                    : 'text-white/90'
-                } ${
-                  location.pathname === link.href
-                    ? scrolled
-                      ? 'text-primary-500'
-                      : 'text-accent-300'
-                    : ''
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            {navLinks.map((link) => {
+              const active = location.pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`text-base font-medium whitespace-nowrap transition-colors duration-200 border-b-2 pb-0.5 ${
+                    active
+                      ? 'text-primary-600 border-primary-500'
+                      : 'text-foreground-800 border-transparent hover:text-primary-600'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             <button
               onClick={() => setCartOpen(true)}
-              className={`relative flex items-center gap-1.5 text-sm font-medium whitespace-nowrap transition-colors duration-200 cursor-pointer ${
-                scrolled ? 'text-foreground-700 hover:text-primary-500' : 'text-white/90 hover:text-accent-300'
-              }`}
-              aria-label="Open cart"
+              className="relative flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold px-5 py-2.5 rounded-full shadow-sm transition-colors duration-200 cursor-pointer whitespace-nowrap"
+              aria-label={`Open cart, ${totalItems} item${totalItems === 1 ? '' : 's'}`}
             >
-              <span className="relative w-5 h-5 flex items-center justify-center">
-                <i className="ri-shopping-bag-line"></i>
-                {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-primary-500 text-background-50 text-[10px] font-bold rounded-full">
-                    {totalItems > 9 ? '9+' : totalItems}
-                  </span>
-                )}
-              </span>
+              <i className="ri-shopping-bag-3-line text-xl leading-none"></i>
               Cart
+              {badge}
             </button>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex items-center justify-center w-10 h-10 rounded-md"
-            aria-label="Toggle menu"
-            style={{ color: scrolled ? 'oklch(var(--foreground-950))' : 'white' }}
-          >
-            <i className={`text-xl ${mobileOpen ? 'ri-close-line' : 'ri-menu-line'}`}></i>
-          </button>
+          {/* Mobile: cart + hamburger */}
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative flex items-center justify-center w-11 h-11 rounded-full bg-primary-500 text-white"
+              aria-label={`Open cart, ${totalItems} item${totalItems === 1 ? '' : 's'}`}
+            >
+              <i className="ri-shopping-bag-3-line text-xl leading-none"></i>
+              {badge}
+            </button>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="flex items-center justify-center w-11 h-11 rounded-md text-foreground-950"
+              aria-label="Toggle menu"
+            >
+              <i className={`text-2xl ${mobileOpen ? 'ri-close-line' : 'ri-menu-line'}`}></i>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile menu */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ${
-          mobileOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+          mobileOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <div className="bg-background-50/98 backdrop-blur-md border-t border-background-200/70 px-4 py-4 flex flex-col gap-3">
+        <div className="bg-background-50 border-t border-background-200 px-4 py-3 flex flex-col">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               to={link.href}
-              className={`text-sm font-medium py-2 whitespace-nowrap ${
-                location.pathname === link.href
-                  ? 'text-primary-500'
-                  : 'text-foreground-700'
+              className={`text-base font-medium py-3 whitespace-nowrap border-b border-background-200 last:border-b-0 ${
+                location.pathname === link.href ? 'text-primary-600' : 'text-foreground-800'
               }`}
             >
               {link.label}
@@ -128,17 +112,10 @@ export default function Navbar() {
           ))}
           <Link
             to="/cart"
-            className="text-sm font-medium py-2 whitespace-nowrap text-foreground-700 flex items-center gap-2"
+            className="text-base font-semibold py-3 whitespace-nowrap text-primary-600 flex items-center gap-2"
           >
-            <span className="relative w-5 h-5 flex items-center justify-center">
-              <i className="ri-shopping-bag-line"></i>
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 flex items-center justify-center bg-primary-500 text-background-50 text-[10px] font-bold rounded-full">
-                  {totalItems > 9 ? '9+' : totalItems}
-                </span>
-              )}
-            </span>
-            Cart
+            <i className="ri-shopping-bag-3-line text-xl"></i>
+            View Cart{totalItems > 0 ? ` (${totalItems})` : ''}
           </Link>
         </div>
       </div>

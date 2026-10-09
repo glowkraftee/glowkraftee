@@ -76,7 +76,7 @@ export default function MiniCart() {
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center gap-3 pt-12">
               <span className="w-16 h-16 flex items-center justify-center rounded-full bg-background-100">
-                <i className="ri-shopping-bag-3-line text-foreground-300 text-2xl"></i>
+                <i className="ri-shopping-bag-3-line text-foreground-500 text-2xl"></i>
               </span>
               <p className="font-heading text-lg text-foreground-700">Your cart is empty</p>
               <p className="text-sm text-foreground-500 max-w-[280px]">
@@ -157,7 +157,7 @@ export default function MiniCart() {
                         </span>
                         <button
                           onClick={() => removeItem(item.productId)}
-                          className="w-6 h-6 flex items-center justify-center text-foreground-400 hover:text-primary-500 transition-colors duration-150"
+                          className="w-6 h-6 flex items-center justify-center text-foreground-600 hover:text-primary-500 transition-colors duration-150"
                           aria-label="Remove item"
                         >
                           <i className="ri-delete-bin-line text-sm"></i>
@@ -184,14 +184,14 @@ export default function MiniCart() {
 
             {/* Customs note */}
             {subtotal < 800 && (
-              <p className="text-xs text-foreground-500 leading-relaxed">
+              <p className="text-sm text-foreground-500 leading-relaxed">
                 Add {formatPrice(800 - subtotal)} more for free shipping. Orders under $800 enter the US duty-free under Section 321 de minimis.
               </p>
             )}
             {subtotal >= 800 && (
-              <p className="text-xs text-secondary-700 leading-relaxed bg-secondary-100/70 rounded-md px-3 py-2">
+              <p className="text-sm text-secondary-700 leading-relaxed bg-secondary-100/70 rounded-md px-3 py-2">
                 <span className="w-3 h-3 flex items-center justify-center inline-block mr-1 align-middle">
-                  <i className="ri-checkbox-circle-fill text-secondary-600 text-xs"></i>
+                  <i className="ri-checkbox-circle-fill text-secondary-600 text-sm"></i>
                 </span>
                 You've unlocked free shipping on this order!
               </p>

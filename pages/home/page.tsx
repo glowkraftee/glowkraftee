@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart';
 import { supabase } from '@/lib/supabase';
 import Footer from '@/components/feature/Footer';
+import Navbar from '@/components/feature/Navbar';
 
 interface LiveProduct {
   id: number;
@@ -14,7 +15,7 @@ interface LiveProduct {
 export default function Home() {
 const navigate = useNavigate();
 
-const { addItem, totalItems } = useCart();
+const { addItem } = useCart();
 
 const handleBuyNow = (product: { productId: number; name: string; price: number; image: string }) => {
   addItem({ ...product, quantity: 1 });
@@ -44,28 +45,7 @@ useEffect(() => {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
-      {/* NAVIGATION HEADER */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex justify-between h-16 items-center">
-      <div className="flex-shrink-0">
-        <span className="text-xl font-bold tracking-tight text-gray-900">GlowKraftee</span>
-      </div>
-
-          <div className="hidden md:flex space-x-8 font-medium text-gray-600">
-           <Link to="/" className="text-amber-600">Home</Link>
-<Link to="/products" className="hover:text-amber-600 transition">Shop Collections</Link>
-<Link to="/about" className="hover:text-amber-600 transition">Our Story</Link>
-<Link to="/orders" className="hover:text-amber-600 transition">Track Order</Link>
-          </div>
-
-          <button onClick={() => window.location.href = '/cart'} className="relative text-gray-600 hover:text-amber-600 transition p-1" aria-label="View Cart">
-            <span className="text-xl">🛒</span>
-            <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">{totalItems}</span>
-          </button>
-    </div>
-  </div>
-</nav>
+      <Navbar />
 
       
     {/* HERO BANNER SECTION */}

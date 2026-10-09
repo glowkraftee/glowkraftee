@@ -132,7 +132,7 @@ export default function ProductDetailPage() {
     return (
       <div className="min-h-screen bg-background-50">
         <Navbar />
-        <main className="pt-20 md:pt-24">
+        <main className="">
           <div className="w-full max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
             <div className="flex flex-col lg:flex-row gap-8 md:gap-12 animate-pulse">
               <div className="w-full lg:w-3/5">
@@ -161,10 +161,10 @@ export default function ProductDetailPage() {
     return (
       <div className="min-h-screen bg-background-50">
         <Navbar />
-        <main className="pt-20 md:pt-24">
+        <main className="">
           <div className="w-full max-w-7xl mx-auto px-4 md:px-6 py-20 text-center">
             <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-full bg-background-200">
-              <i className="ri-error-warning-line text-2xl text-foreground-400"></i>
+              <i className="ri-error-warning-line text-2xl text-foreground-600"></i>
             </div>
             <h2 className="font-heading text-2xl font-medium text-foreground-950 mb-2">Product not found</h2>
             <p className="text-sm text-foreground-500 mb-6">This piece may no longer be available or the link might be broken.</p>
@@ -209,10 +209,10 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-background-50">
       <Navbar />
 
-      <main className="pt-20 md:pt-24">
+      <main className="">
         {/* Breadcrumb */}
         <div className="w-full max-w-7xl mx-auto px-4 md:px-6 py-4">
-          <nav className="flex items-center gap-2 text-xs md:text-sm text-foreground-400">
+          <nav className="flex items-center gap-2 text-sm text-foreground-600">
             <Link to="/" className="hover:text-foreground-600 transition-colors">Home</Link>
             <span>/</span>
             <Link to="/products" className="hover:text-foreground-600 transition-colors">Shop</Link>
@@ -247,7 +247,7 @@ export default function ProductDetailPage() {
                   />
                 )}
                 {product.discount_enabled && (
-                  <span className="absolute top-4 left-4 text-xs font-medium px-2.5 py-1 rounded-full bg-red-500 text-background-50 whitespace-nowrap">
+                  <span className="absolute top-4 left-4 text-sm font-medium px-2.5 py-1 rounded-full bg-red-500 text-background-50 whitespace-nowrap">
                     Sale
                   </span>
                 )}
@@ -282,7 +282,7 @@ export default function ProductDetailPage() {
               <div className="lg:sticky lg:top-24">
                 {/* Category */}
                 {product.product_categories && (
-                  <p className="text-xs text-foreground-400 uppercase tracking-wider mb-2">
+                  <p className="text-sm text-foreground-600 uppercase tracking-wider mb-2">
                     {product.product_categories.name}
                   </p>
                 )}
@@ -298,7 +298,7 @@ export default function ProductDetailPage() {
                     ${displayPrice.toFixed(2)} USD
                   </span>
                   {originalPrice && (
-                    <span className="text-lg text-foreground-400 line-through">
+                    <span className="text-lg text-foreground-600 line-through">
                       ${originalPrice.toFixed(2)}
                     </span>
                   )}
@@ -357,7 +357,7 @@ export default function ProductDetailPage() {
                 {totalItems > 0 && (
                   <button
                     onClick={() => setCartOpen(true)}
-                    className="w-full text-center text-xs text-foreground-500 hover:text-primary-500 transition-colors underline underline-offset-4 cursor-pointer mb-4"
+                    className="w-full text-center text-sm text-foreground-500 hover:text-primary-500 transition-colors underline underline-offset-4 cursor-pointer mb-4"
                   >
                     {totalItems} {totalItems === 1 ? 'item' : 'items'} in cart — view cart
                   </button>
@@ -365,25 +365,25 @@ export default function ProductDetailPage() {
 
                 {/* Trust badges */}
                 <div className="grid grid-cols-2 gap-3 mt-6">
-                  <div className="flex items-center gap-2 text-xs text-foreground-500">
+                  <div className="flex items-center gap-2 text-sm text-foreground-500">
                     <span className="w-4 h-4 flex items-center justify-center text-accent-500">
                       <i className="ri-shield-check-line"></i>
                     </span>
                     Secure Checkout
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-foreground-500">
+                  <div className="flex items-center gap-2 text-sm text-foreground-500">
                     <span className="w-4 h-4 flex items-center justify-center text-accent-500">
                       <i className="ri-truck-line"></i>
                     </span>
                     Tracked Shipping
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-foreground-500">
+                  <div className="flex items-center gap-2 text-sm text-foreground-500">
                     <span className="w-4 h-4 flex items-center justify-center text-accent-500">
                       <i className="ri-verified-badge-line"></i>
                     </span>
                     Authenticity Guaranteed
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-foreground-500">
+                  <div className="flex items-center gap-2 text-sm text-foreground-500">
                     <span className="w-4 h-4 flex items-center justify-center text-accent-500">
                       <i className="ri-customer-service-line"></i>
                     </span>
@@ -407,7 +407,7 @@ export default function ProductDetailPage() {
                   className={`whitespace-nowrap text-sm md:text-base font-medium px-4 py-3 border-b-2 transition-colors cursor-pointer ${
                     idx === activeTab
                       ? 'border-primary-500 text-foreground-950'
-                      : 'border-transparent text-foreground-400 hover:text-foreground-600'
+                      : 'border-transparent text-foreground-600 hover:text-foreground-600'
                   }`}
                 >
                   {label}

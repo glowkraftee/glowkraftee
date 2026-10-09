@@ -32,7 +32,7 @@ export default function Cart() {
             <div className="max-w-2xl">
               <div className="flex items-center gap-3 mb-5">
                 <span className="block w-8 md:w-12 h-px bg-accent-300/70"></span>
-                <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-accent-200 font-label">
+                <span className="text-sm uppercase tracking-[0.3em] text-accent-200 font-label">
                   Your Cart
                 </span>
               </div>
@@ -70,7 +70,7 @@ export default function Cart() {
               /* ── Empty State ── */
               <div className="max-w-lg mx-auto text-center py-16 md:py-24">
                 <div className="w-20 h-20 md:w-24 md:h-24 mx-auto flex items-center justify-center rounded-full bg-background-100 mb-8">
-                  <i className="ri-shopping-bag-line text-3xl md:text-4xl text-foreground-300"></i>
+                  <i className="ri-shopping-bag-line text-3xl md:text-4xl text-foreground-500"></i>
                 </div>
                 <h2 className="font-heading text-2xl md:text-3xl font-light text-foreground-950 mb-4">
                   Your cart is empty
@@ -100,7 +100,7 @@ export default function Cart() {
                     </h2>
                     <button
                       onClick={() => setShowClearConfirm(true)}
-                      className="text-xs text-foreground-400 hover:text-primary-500 transition-colors cursor-pointer whitespace-nowrap underline decoration-foreground-300/40 underline-offset-4"
+                      className="text-sm text-foreground-600 hover:text-primary-500 transition-colors cursor-pointer whitespace-nowrap underline decoration-foreground-300/40 underline-offset-4"
                     >
                       Clear all
                     </button>
@@ -147,7 +147,7 @@ export default function Cart() {
                                 className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-background-200 transition-colors cursor-pointer"
                                 aria-label="Decrease quantity"
                               >
-                                <i className="ri-subtract-line text-xs text-foreground-600"></i>
+                                <i className="ri-subtract-line text-sm text-foreground-600"></i>
                               </button>
                               <span className="w-8 text-center text-sm font-medium text-foreground-950 font-label">
                                 {item.quantity}
@@ -157,7 +157,7 @@ export default function Cart() {
                                 className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-background-200 transition-colors cursor-pointer"
                                 aria-label="Increase quantity"
                               >
-                                <i className="ri-add-line text-xs text-foreground-600"></i>
+                                <i className="ri-add-line text-sm text-foreground-600"></i>
                               </button>
                             </div>
 
@@ -171,7 +171,7 @@ export default function Cart() {
                                 className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-primary-100 transition-colors cursor-pointer"
                                 aria-label={`Remove ${item.name}`}
                               >
-                                <i className="ri-delete-bin-line text-sm text-foreground-400 hover:text-primary-500"></i>
+                                <i className="ri-delete-bin-line text-sm text-foreground-600 hover:text-primary-500"></i>
                               </button>
                             </div>
                           </div>
@@ -204,13 +204,13 @@ export default function Cart() {
                       </div>
 
                       {shippingEstimate > 0 && subtotal > 0 && (
-                        <p className="text-[11px] text-foreground-400 leading-relaxed">
+                        <p className="text-sm text-foreground-600 leading-relaxed">
                           Free shipping on orders over $800 to the USA. Add ${(800 - subtotal).toFixed(2)} more to qualify.
                         </p>
                       )}
 
                       {shippingEstimate === 0 && subtotal > 0 && (
-                        <p className="text-[11px] text-secondary-700 leading-relaxed">
+                        <p className="text-sm text-secondary-700 leading-relaxed">
                           Free shipping unlocked — your order qualifies for complimentary delivery to the USA.
                         </p>
                       )}
@@ -234,9 +234,9 @@ export default function Cart() {
                     {subtotal > 0 && subtotal < 800 && (
                       <div className="mt-5 flex gap-2.5 p-3 bg-accent-100/60 rounded-lg">
                         <span className="shrink-0 w-4 h-4 flex items-center justify-center mt-0.5">
-                          <i className="ri-information-line text-xs text-accent-700"></i>
+                          <i className="ri-information-line text-sm text-accent-700"></i>
                         </span>
-                        <p className="text-[11px] text-accent-800 leading-relaxed">
+                        <p className="text-sm text-accent-800 leading-relaxed">
                           Orders under $800 ship duty-free to the USA under the de minimis rule. No surprise customs fees.
                         </p>
                       </div>
@@ -257,7 +257,7 @@ export default function Cart() {
                       className="mt-4 w-full inline-flex items-center justify-center gap-2 text-sm text-foreground-500 hover:text-foreground-800 transition-colors cursor-pointer whitespace-nowrap underline decoration-foreground-300/40 underline-offset-4"
                     >
                       <span className="w-4 h-4 flex items-center justify-center">
-                        <i className="ri-arrow-left-line text-xs"></i>
+                        <i className="ri-arrow-left-line text-sm"></i>
                       </span>
                       Continue Shopping
                     </Link>
@@ -313,8 +313,8 @@ export default function Cart() {
                   <i className="ri-shield-check-line text-secondary-600"></i>
                 </span>
                 <div>
-                  <p className="text-xs font-medium text-foreground-950">Secure Checkout</p>
-                  <p className="text-[11px] text-foreground-400">Encrypted &amp; protected</p>
+                  <p className="text-sm font-medium text-foreground-950">Secure Checkout</p>
+                  <p className="text-sm text-foreground-600">Encrypted &amp; protected</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -322,8 +322,8 @@ export default function Cart() {
                   <i className="ri-global-line text-accent-600"></i>
                 </span>
                 <div>
-                  <p className="text-xs font-medium text-foreground-950">Ships Worldwide</p>
-                  <p className="text-[11px] text-foreground-400">7–14 days to the USA</p>
+                  <p className="text-sm font-medium text-foreground-950">Ships Worldwide</p>
+                  <p className="text-sm text-foreground-600">7–14 days to the USA</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -331,8 +331,8 @@ export default function Cart() {
                   <i className="ri-arrow-go-back-line text-primary-600"></i>
                 </span>
                 <div>
-                  <p className="text-xs font-medium text-foreground-950">Easy Returns</p>
-                  <p className="text-[11px] text-foreground-400">14-day policy</p>
+                  <p className="text-sm font-medium text-foreground-950">Easy Returns</p>
+                  <p className="text-sm text-foreground-600">14-day policy</p>
                 </div>
               </div>
             </div>
@@ -356,10 +356,10 @@ export default function Cart() {
                 Every piece is made{' '}
                 <span className="italic text-accent-300">just for you</span>
               </h2>
-              <p className="mt-5 text-xs md:text-sm text-background-100/80 leading-relaxed max-w-md mx-auto">
+              <p className="mt-5 text-sm text-background-100/80 leading-relaxed max-w-md mx-auto">
                 Nothing mass-produced. Everything handcrafted with care by artisans who pour their soul into every creation.
               </p>
-              <p className="mt-6 text-xs text-background-100/50 font-label italic tracking-wider">
+              <p className="mt-6 text-sm text-background-100/50 font-label italic tracking-wider">
                 GlowKraftee — Light up the World, One Handcrafted Piece at a Time
               </p>
             </div>
