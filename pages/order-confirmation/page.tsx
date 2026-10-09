@@ -10,6 +10,23 @@ import { useCart } from '@/hooks/useCart';
 const ORDER_PARAM_KEYS = ['order_id', 'orderId', 'order', 'reference', 'ref'];
 const TRACKER_PARAM_KEYS = ['tracker', 'token', 'tbt'];
 
+// Safepay appends its own "?tracker=..." to a redirect URL that may already
+// contain "?order_id=...", producing values like "track_abc?order_id=20".
+// Split those apart so each parameter is read cleanly.
+function normalizeParams(raw: URLSearchParams): URLSearchParams {
+  const clean = new URLSearchParams();
+  raw.forEach((value, key) => {
+    const [head, ...rest] = value.split('?');
+    if (!clean.has(key)) clean.set(key, head);
+    if (rest.length) {
+      new URLSearchParams(rest.join('&')).forEach((v, k) => {
+        if (!clean.has(k)) clean.set(k, v);
+      });
+    }
+  });
+  return clean;
+}
+
 function firstParam(params: URLSearchParams, keys: string[]): string | null {
   for (const key of keys) {
     const value = params.get(key);
@@ -19,7 +36,8 @@ function firstParam(params: URLSearchParams, keys: string[]): string | null {
 }
 
 export default function OrderConfirmation() {
-  const [searchParams] = useSearchParams();
+  const [rawParams] = useSearchParams();
+  const searchParams = normalizeParams(rawParams);
   const { clearCart } = useCart();
   const cleared = useRef(false);
 
