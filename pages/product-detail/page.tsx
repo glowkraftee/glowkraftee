@@ -221,7 +221,7 @@ export default function ProductDetailPage() {
             {product.product_categories && (
               <>
                 <Link
-                  to={`/products?category=${product.product_categories.id === 1 ? 'home-decor' : product.product_categories.id === 2 ? 'personalized-gifts' : 'accessories'}`}
+                  to={`/products?category=${product.product_categories.id}`}
                   className="hover:text-foreground-600 transition-colors"
                 >
                   {product.product_categories.name}
