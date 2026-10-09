@@ -87,12 +87,16 @@ export default function Orders() {
   const [error, setError] = useState('');
   const [order, setOrder] = useState<OrderHeader | null>(null);
   const [items, setItems] = useState<OrderItem[]>([]);
+  const [downloads, setDownloads] = useState<{ product_name: string; url: string }[]>([]);
+  const [hasDigital, setHasDigital] = useState(false);
 
   const handleLookup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setOrder(null);
     setItems([]);
+    setDownloads([]);
+    setHasDigital(false);
 
     const trimmedOrder = orderNumber.trim();
     const trimmedEmail = email.trim();
@@ -108,45 +112,29 @@ export default function Orders() {
       return;
     }
 
+    if (!trimmedEmail) {
+      setError('Please enter the email address you used at checkout.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const { data: orderData, error: orderErr } = await supabase
-        .from('order_headers')
-        .select('*')
-        .eq('id', orderId)
-        .maybeSingle();
+      // Orders are private: the server checks the order number + email.
+      const { data, error: fnErr } = await supabase.functions.invoke('order-access', {
+        body: { order_id: orderId, email: trimmedEmail },
+      });
 
-      if (orderErr) throw orderErr;
-
-      if (!orderData) {
-        setError('No order found with that number. Please double-check and try again.');
+      if (fnErr || !data?.order) {
+        setError('No order found with that number and email. Please double-check and try again.');
         setLoading(false);
         return;
       }
 
-      const header = orderData as unknown as OrderHeader;
-
-      if (trimmedEmail) {
-        const recipient = header.recipient || {};
-        const recipientEmail = (recipient.email || '').toLowerCase();
-        if (recipientEmail && recipientEmail !== trimmedEmail.toLowerCase()) {
-          setError('The email does not match this order. Please try again.');
-          setLoading(false);
-          return;
-        }
-      }
-
-      const { data: itemData, error: itemsErr } = await supabase
-        .from('order_items')
-        .select('*')
-        .eq('order_id', orderId)
-        .order('id', { ascending: true });
-
-      if (itemsErr) throw itemsErr;
-
-      setOrder(header);
-      setItems((itemData as unknown as OrderItem[]) || []);
+      setOrder(data.order as OrderHeader);
+      setItems((data.items as OrderItem[]) || []);
+      setDownloads(data.downloads || []);
+      setHasDigital(!!data.has_digital);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Something went wrong';
       setError(`Could not look up your order: ${message}`);
@@ -229,17 +217,18 @@ export default function Orders() {
 
                 <div>
                   <label htmlFor="order-email" className="block text-xs font-medium text-foreground-500 mb-2 uppercase tracking-wider font-label">
-                    Email (optional)
+                    Email used at checkout
                   </label>
                   <input
                     id="order-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
                     placeholder="The email used at checkout"
                     className="w-full bg-transparent border-b border-foreground-300/60 text-foreground-950 text-sm py-3 px-1 placeholder:text-foreground-400 focus:outline-none focus:border-primary-500 transition-colors"
                   />
-                  <p className="mt-1.5 text-[11px] text-foreground-400">Add your email for extra verification. Optional but recommended.</p>
+                  <p className="mt-1.5 text-xs text-foreground-500">For your privacy, we only show an order when the email matches.</p>
                 </div>
 
                 <button
@@ -411,6 +400,38 @@ export default function Orders() {
                     </div>
                   )}
                 </div>
+
+                {/* ── Digital downloads ── */}
+                {hasDigital && (
+                  <div className="mb-8 rounded-2xl border border-secondary-200 bg-secondary-100/40 p-5 md:p-6">
+                    <h3 className="font-heading text-xl text-foreground-950 mb-2 flex items-center gap-2">
+                      <i className="ri-download-2-line text-primary-600"></i>
+                      Your digital downloads
+                    </h3>
+                    {downloads.length > 0 ? (
+                      <div className="flex flex-col gap-3">
+                        {downloads.map((d) => (
+                          <a
+                            key={d.url}
+                            href={d.url}
+                            className="inline-flex items-center justify-between gap-3 bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold px-5 py-3 rounded-full transition-colors"
+                          >
+                            <span className="truncate">Download: {d.product_name}</span>
+                            <i className="ri-download-line text-xl"></i>
+                          </a>
+                        ))}
+                        <p className="text-sm text-foreground-600">
+                          Links stay active for 24 hours. You can come back to this page any time for a fresh link.
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-foreground-700">
+                        Your download will appear here as soon as your payment is confirmed (usually within a few minutes).
+                        Please search again in a few minutes.
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 {/* ── Order Details Grid ── */}
                 <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">

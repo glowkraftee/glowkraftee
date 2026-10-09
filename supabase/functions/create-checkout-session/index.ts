@@ -90,12 +90,13 @@ Deno.serve(async (req: Request) => {
     // --- Real prices from the database ---
     const { data: products, error: prodErr } = await supabase
       .from("product_items")
-      .select("id, name, price, discount_enabled, discount_price, status")
+      .select("id, name, price, discount_enabled, discount_price, status, is_digital")
       .in("id", [...wanted.keys()]);
     if (prodErr) throw prodErr;
 
     const byId = new Map((products ?? []).map((p) => [Number(p.id), p]));
     const lineItems = [];
+    let allDigital = true;
     for (const [id, quantity] of wanted) {
       const p = byId.get(id);
       if (!p || p.status !== "active") {
@@ -105,6 +106,7 @@ Deno.serve(async (req: Request) => {
         ? Number(p.discount_price)
         : Number(p.price);
       if (!(unit > 0)) return jsonError("A product in your cart has no valid price", 409, { id });
+      if (!p.is_digital) allDigital = false;
       lineItems.push({
         product_name: p.name as string,
         quantity,
@@ -118,7 +120,8 @@ Deno.serve(async (req: Request) => {
     // --- Totals computed on the server ---
     const currency = "USD";
     const subtotal_items = round2(lineItems.reduce((s, i) => s + i.subtotal, 0));
-    const shipping_total = subtotal_items >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
+    // Digital-only orders (downloads) have nothing to ship.
+    const shipping_total = allDigital || subtotal_items >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
     const tax_total = round2(subtotal_items * TAX_RATE);
     const grandTotal = round2(subtotal_items + shipping_total + tax_total);
 

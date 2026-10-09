@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
 import { useCart } from '@/hooks/useCart';
 import { CONTACT_EMAIL } from '@/lib/siteConfig';
+import { supabase } from '@/lib/supabase';
 
 // Safepay sends the customer back here after the hosted payment page.
 // The exact query parameter names depend on the redirect URL configured in
@@ -52,6 +53,40 @@ export default function OrderConfirmation() {
       ? 'Payment not completed — GlowKraftee'
       : 'Order Confirmed — GlowKraftee';
   }, [failed]);
+
+  // Digital downloads: ask the server (with the payment reference as proof)
+  // until Safepay's confirmation arrives, then show the download links.
+  const [hasDigital, setHasDigital] = useState(false);
+  const [downloads, setDownloads] = useState<{ product_name: string; url: string }[]>([]);
+  const [waitingTooLong, setWaitingTooLong] = useState(false);
+
+  useEffect(() => {
+    if (failed || !orderNumber || !tracker) return;
+    let stopped = false;
+    let attempts = 0;
+    const check = async () => {
+      attempts += 1;
+      const { data } = await supabase.functions.invoke('order-access', {
+        body: { order_id: Number(orderNumber), tracker },
+      });
+      if (stopped) return;
+      if (data?.has_digital) setHasDigital(true);
+      if (data?.downloads?.length) {
+        setDownloads(data.downloads);
+        return; // done
+      }
+      if (data && !data.has_digital) return; // physical-only order: nothing to wait for
+      if (attempts >= 50) {
+        setWaitingTooLong(true); // ~5 minutes
+        return;
+      }
+      setTimeout(check, 6000);
+    };
+    check();
+    return () => {
+      stopped = true;
+    };
+  }, [failed, orderNumber, tracker]);
 
   // Payment went through on Safepay's side, so empty the cart once.
   useEffect(() => {
@@ -112,6 +147,42 @@ export default function OrderConfirmation() {
                     <p className="text-xs text-foreground-400 font-mono mb-2 break-all">
                       Payment reference: {tracker}
                     </p>
+                  )}
+                  {hasDigital && (
+                    <div className="mt-8 rounded-2xl border border-secondary-200 bg-secondary-100/40 p-5 text-left">
+                      <h2 className="font-heading text-xl text-foreground-950 mb-3 flex items-center gap-2">
+                        <i className="ri-download-2-line text-primary-600"></i>
+                        Your digital download
+                      </h2>
+                      {downloads.length > 0 ? (
+                        <div className="flex flex-col gap-3">
+                          {downloads.map((d) => (
+                            <a
+                              key={d.url}
+                              href={d.url}
+                              className="inline-flex items-center justify-between gap-3 bg-primary-500 hover:bg-primary-600 text-white text-base font-semibold px-5 py-3 rounded-full transition-colors"
+                            >
+                              <span className="truncate">Download: {d.product_name}</span>
+                              <i className="ri-download-line text-xl"></i>
+                            </a>
+                          ))}
+                          <p className="text-sm text-foreground-600">
+                            This link works for 24 hours. Need it again later? Go to{' '}
+                            <Link to="/orders" className="underline text-primary-600">Orders</Link>, enter order #{orderNumber} and your email.
+                          </p>
+                        </div>
+                      ) : waitingTooLong ? (
+                        <p className="text-sm text-foreground-700">
+                          Your payment is still being confirmed. Go to{' '}
+                          <Link to="/orders" className="underline text-primary-600">Orders</Link> in a few minutes, enter order #{orderNumber} and your email, and your download will be there.
+                        </p>
+                      ) : (
+                        <p className="text-sm text-foreground-700 flex items-center gap-2">
+                          <i className="ri-loader-4-line animate-spin text-lg text-primary-600"></i>
+                          Confirming your payment… your download button will appear here in a minute or two. Please keep this page open.
+                        </p>
+                      )}
+                    </div>
                   )}
                   <p className="text-xs text-foreground-400 leading-relaxed mt-6 mb-10 max-w-sm mx-auto">
                     A confirmation email will be sent to you shortly. You can also reach us anytime at{' '}

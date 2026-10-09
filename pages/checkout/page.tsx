@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/feature/Navbar';
 import Footer from '@/components/feature/Footer';
@@ -40,8 +40,22 @@ export default function Checkout() {
   const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle');
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
-  const shippingEstimate = items.length > 0 ? (subtotal >= 800 ? 0 : 14.99) : 0;
-  const taxEstimate = items.length > 0 ? subtotal * 0.0625 : 0;
+  // Digital-only carts (downloads) have no shipping; the server applies the same rule.
+  const [digitalIds, setDigitalIds] = useState<Set<number>>(new Set());
+  const cartIdsKey = items.map((i) => i.productId).sort().join(',');
+  useEffect(() => {
+    if (!cartIdsKey) return;
+    supabase
+      .from('product_items')
+      .select('id, is_digital')
+      .in('id', cartIdsKey.split(',').map(Number))
+      .then(({ data }) => {
+        if (data) setDigitalIds(new Set(data.filter((p) => p.is_digital).map((p) => Number(p.id))));
+      });
+  }, [cartIdsKey]);
+  const allDigital = items.length > 0 && items.every((i) => digitalIds.has(i.productId));
+  const shippingEstimate = items.length > 0 ? (allDigital || subtotal >= 800 ? 0 : 14.99) : 0;
+  const taxEstimate = items.length > 0 ? Math.round(subtotal * 0.0625 * 100) / 100 : 0;
   const orderTotal = subtotal + shippingEstimate + taxEstimate;
 
   // SEO injection
@@ -642,7 +656,7 @@ export default function Checkout() {
                       <div className="flex items-center justify-between">
                         <span className="text-foreground-500">Shipping</span>
                         {shippingEstimate === 0 ? (
-                          <span className="text-secondary-700 font-medium font-label">Free</span>
+                          <span className="text-secondary-700 font-medium font-label">{allDigital ? 'Digital download' : 'Free'}</span>
                         ) : (
                           <span className="font-medium text-foreground-950 font-label">${shippingEstimate.toFixed(2)}</span>
                         )}
@@ -677,8 +691,10 @@ export default function Checkout() {
                         <span className="shrink-0 w-4 h-4 flex items-center justify-center mt-0.5">
                           <i className="ri-check-line text-xs text-secondary-700"></i>
                         </span>
-                        <p className="text-[11px] text-secondary-800 leading-relaxed">
-                          Free shipping unlocked! Your order qualifies for complimentary delivery to the USA.
+                        <p className="text-sm text-secondary-800 leading-relaxed">
+                          {allDigital
+                            ? 'Digital download: nothing to ship. Your download button appears on the confirmation page right after payment.'
+                            : 'Free shipping unlocked! Your order qualifies for complimentary delivery to the USA.'}
                         </p>
                       </div>
                     )}
