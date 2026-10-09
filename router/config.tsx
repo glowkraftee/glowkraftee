@@ -9,6 +9,7 @@ import ContactPage from "../pages/contact/page";
 import CartPage from "../pages/cart/page";
 import CheckoutPage from "../pages/checkout/page";
 import OrdersPage from "../pages/orders/page";
+import OrderConfirmationPage from "../pages/order-confirmation/page";
 
 export const routes: RouteObject[] = [
   {
@@ -46,6 +47,10 @@ export const routes: RouteObject[] = [
   {
     path: "/orders",
     element: <OrdersPage />,
+  },
+  {
+    path: "/order-confirmation",
+    element: <OrderConfirmationPage />,
   },
   {
     path: "*",
