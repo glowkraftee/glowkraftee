@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart';
 import { supabase } from '@/lib/supabase';
+import Footer from '@/components/feature/Footer';
 
 interface LiveProduct {
   id: number;
@@ -17,10 +18,7 @@ const { addItem, totalItems } = useCart();
 
 const handleBuyNow = (product: { productId: number; name: string; price: number; image: string }) => {
   addItem({ ...product, quantity: 1 });
-  const target = document.getElementById('checkout-section');
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth' });
-  }
+  navigate('/checkout');
 };
 
 const [products, setProducts] = useState<LiveProduct[]>([]);
@@ -189,36 +187,7 @@ useEffect(() => {
         )}
       </main>
 
-      {/* LIVE SECURE CHECKOUT INTERFACES */}
-      <section id="checkout-section" className="bg-gray-100 py-16 px-4">
-        <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          <div className="text-center mb-6">
-            <div className="flex justify-center items-center gap-2 mb-1">
-              <span className="text-2xl">🛍️</span>
-              <span className="text-xl font-bold text-gray-900">GlowKraftee</span>
-            </div>
-            <p className="text-xs italic text-gray-500">Where Artisans Glow Relations with Love & Care - Storefront</p>
-          </div>
-
-          <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-gray-700 font-medium">Handcrafted Premium Item</span>
-              <span className="font-bold text-gray-900">$15.00</span>
-            </div>
-            <div className="flex justify-between items-center text-sm text-gray-500">
-              <span>Shipping (USA Base)</span>
-              <span>Calculated at cart</span>
-            </div>
-          </div>
-
-          <button 
-            onClick={() => navigate('/checkout')} 
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition duration-200"
-          >
-            Proceed to Secure Checkout
-          </button>
-        </div>
-      </section>
+      <Footer />
 
     </div>
   );
