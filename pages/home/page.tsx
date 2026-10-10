@@ -132,7 +132,7 @@ useEffect(() => {
         {!productsLoading && !productsError && products.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {products.map((product) => {
-              const imageUrl = product.media?.[0]?.url || '';
+              const imageUrl = (product.media?.find((m) => m.type !== 'video') ?? product.media?.[0])?.url || '';
               return (
                 <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
                   <Link to={`/product/${product.id}`} className="h-72 bg-gray-200 flex items-center justify-center text-gray-400 overflow-hidden">

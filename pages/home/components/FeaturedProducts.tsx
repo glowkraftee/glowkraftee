@@ -92,7 +92,7 @@ export default function FeaturedProducts() {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {products.map((product) => {
-            const imageUrl = product.media?.[0]?.url || '';
+            const imageUrl = (product.media?.find((m) => m.type !== 'video') ?? product.media?.[0])?.url || '';
             const badge = productBadges[product.id];
 
             return (

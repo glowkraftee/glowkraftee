@@ -120,7 +120,7 @@ export default function ProductDetailPage() {
       productId: product.id,
       name: product.name,
       price: displayPrice,
-      image: product.media?.[0]?.url || '',
+      image: (product.media?.find((m) => m.type !== 'video') ?? product.media?.[0])?.url || '',
       quantity,
     });
 
@@ -240,13 +240,22 @@ export default function ProductDetailPage() {
             <div className="w-full lg:w-3/5">
               {/* Main Image */}
               <div className="relative overflow-hidden rounded-lg bg-background-200 aspect-square">
-                {allImages[activeImage] && (
+                {allImages[activeImage] && (allImages[activeImage].type === 'video' ? (
+                  <video
+                    key={allImages[activeImage].url}
+                    src={allImages[activeImage].url}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="w-full h-full object-contain bg-background-100"
+                  />
+                ) : (
                   <img
                     src={allImages[activeImage].url}
                     alt={`${product.name} — ${activeImage + 1}`}
                     className="w-full h-full object-contain bg-background-100"
                   />
-                )}
+                ))}
                 {product.discount_enabled && (
                   <span className="absolute top-4 left-4 text-sm font-medium px-2.5 py-1 rounded-full bg-red-500 text-background-50 whitespace-nowrap">
                     Sale
@@ -267,11 +276,26 @@ export default function ProductDetailPage() {
                           : 'border-transparent hover:border-background-300'
                       }`}
                     >
-                      <img
-                        src={img.url}
-                        alt={`${product.name} thumbnail ${idx + 1}`}
-                        className="w-full h-full object-contain bg-background-100"
-                      />
+                      {img.type === 'video' ? (
+                        <span className="relative block w-full h-full">
+                          <video
+                            src={`${img.url}#t=0.5`}
+                            muted
+                            playsInline
+                            preload="metadata"
+                            className="w-full h-full object-cover bg-background-100"
+                          />
+                          <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-white">
+                            <i className="ri-play-circle-fill text-2xl"></i>
+                          </span>
+                        </span>
+                      ) : (
+                        <img
+                          src={img.url}
+                          alt={`${product.name} thumbnail ${idx + 1}`}
+                          className="w-full h-full object-contain bg-background-100"
+                        />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -445,7 +469,7 @@ export default function ProductDetailPage() {
                     >
                       <div className="relative overflow-hidden rounded-lg bg-background-200 aspect-square mb-3">
                         <img
-                          src={rp.media?.[0]?.url || ''}
+                          src={(rp.media?.find((m) => m.type !== 'video') ?? rp.media?.[0])?.url || ''}
                           alt={rp.name}
                           className="w-full h-full object-contain bg-background-100 transition-transform duration-500 group-hover:scale-105"
                         />
