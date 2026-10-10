@@ -18,7 +18,9 @@ Follow these rules every time:
    first photo, so the title is never cut off. Check the result on the live site.
 3. **Photos and videos must be owned by the website — never hotlink Etsy.**
    The owner requires that changes or deletions on Etsy never affect
-   glowkraftee.com. Take up to 8 photos (and any listing video) per listing and
+   glowkraftee.com. Take up to 8 photos plus ONE video clip (the listing's first
+   video, if it has one; add it after the photos as `{"type": "video"}` — the
+   product page plays it, cards always use a photo) per listing and
    copy every file into Supabase storage (`product-images/etsy-import/<product id>/`)
    or `public/images/...`; `product_items.media` must not contain any
    `etsystatic.com` URL. The sandbox cannot reach Etsy directly; a short-lived,
