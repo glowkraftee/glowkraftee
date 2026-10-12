@@ -18,7 +18,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 // ---- Settings -------------------------------------------------------------
 // Set to true once glowkraftee.com is verified in Resend (Domains page).
 // Until then Resend only delivers to the account owner's address.
-const DOMAIN_VERIFIED = false;
+const DOMAIN_VERIFIED = true;
 
 const FROM = DOMAIN_VERIFIED
   ? "GlowKraftee <orders@glowkraftee.com>"

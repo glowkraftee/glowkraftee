@@ -43,6 +43,18 @@ Follow these rules every time:
 8. Flag strong health claims (asthma, SAD, etc.) to the owner rather than
    silently publishing them.
 
+## Emails (Resend, domain glowkraftee.com verified)
+
+- Sender: `GlowKraftee <orders@glowkraftee.com>` (DNS at Namecheap: `resend._domainkey`
+  TXT, `send` + `rsend` CNAMEs, `_dmarc` TXT — keep them; Mail Settings stay on
+  Private Email).
+- `notify-owner` function (settings at the top of the file):
+  paid orders → alert to glowkraftee@gmail.com + altaf.iqbal@yahoo.com, and a
+  confirmation to the buyer (with 7-day download links for digital items);
+  contact messages / newsletter sign-ups → glowkraftee@gmail.com.
+- Triggered by database triggers (orders: when status changes to `paid`);
+  `notified_at` prevents duplicates.
+
 ## Security rules already in place – keep them
 
 - Checkout prices, shipping and tax are computed on the server
