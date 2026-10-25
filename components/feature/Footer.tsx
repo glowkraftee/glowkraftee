@@ -189,13 +189,18 @@ export default function Footer() {
           <p className="text-xs text-foreground-500">
             &copy; {new Date().getFullYear()} GlowKraftee. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
-            <Link onClick={() => window.scrollTo({ top: 0 })} to="/faq" className="text-xs text-foreground-400 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
-              Shipping Policy
-            </Link>
-            <a href="#" className="text-xs text-foreground-400 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
-              Privacy
-            </a>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            {[
+              ['/privacy-policy', 'Privacy Policy'],
+              ['/terms', 'Terms & Conditions'],
+              ['/refund-policy', 'Return & Refund Policy'],
+              ['/shipping-policy', 'Shipping Policy'],
+              ['/ownership', 'Ownership'],
+            ].map(([to, label]) => (
+              <Link key={to} onClick={() => window.scrollTo({ top: 0 })} to={to} className="text-xs text-foreground-400 hover:text-accent-300 transition-colors whitespace-nowrap underline decoration-foreground-600/40 underline-offset-4">
+                {label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

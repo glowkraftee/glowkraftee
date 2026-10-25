@@ -10,6 +10,7 @@ import CartPage from "../pages/cart/page";
 import CheckoutPage from "../pages/checkout/page";
 import OrdersPage from "../pages/orders/page";
 import OrderConfirmationPage from "../pages/order-confirmation/page";
+import LegalPage from "../pages/legal/page";
 
 export const routes: RouteObject[] = [
   {
@@ -24,6 +25,11 @@ export const routes: RouteObject[] = [
     path: "/product/:id",
     element: <ProductDetailPage />,
   },
+  { path: "/privacy-policy", element: <LegalPage doc="privacy" /> },
+  { path: "/terms", element: <LegalPage doc="terms" /> },
+  { path: "/refund-policy", element: <LegalPage doc="refund" /> },
+  { path: "/shipping-policy", element: <LegalPage doc="shipping" /> },
+  { path: "/ownership", element: <LegalPage doc="ownership" /> },
   {
     path: "/about",
     element: <AboutPage />,
