@@ -164,8 +164,9 @@ export default function Footer() {
                 Studio
               </h4>
               <p className="text-sm text-foreground-300 leading-relaxed">
-                Gulberg III, Lahore<br />
-                Punjab 54660, Pakistan
+                House # 29-C, Gosha-e-Ahbab Phase II,<br />
+                Inside Azam Gardens, Multan Road,<br />
+                Lahore 54500, Pakistan
               </p>
             </div>
           </div>
