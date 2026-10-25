@@ -164,7 +164,7 @@ export default function Footer() {
                 Studio
               </h4>
               <p className="text-sm text-foreground-300 leading-relaxed">
-                House # 29-C, Gosha-e-Ahbab Phase II,<br />
+                House # 30-C, Gosha-e-Ahbab Phase II,<br />
                 Inside Azam Gardens, Multan Road,<br />
                 Lahore 54500, Pakistan
               </p>

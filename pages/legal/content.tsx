@@ -5,7 +5,7 @@ import { CONTACT_EMAIL } from '@/lib/siteConfig';
 export const OWNER_NAME = 'Altaf Iqbal';
 export const BUSINESS_NAME = 'GlowKraftee';
 export const BUSINESS_TYPE = 'sole proprietorship';
-export const BUSINESS_ADDRESS = 'House # 29-C, Gosha-e-Ahbab Phase II, Inside Azam Gardens, Multan Road, Lahore 54500, Pakistan';
+export const BUSINESS_ADDRESS = 'House # 30-C, Gosha-e-Ahbab Phase II, Inside Azam Gardens, Multan Road, Lahore 54500, Pakistan';
 export const LAST_UPDATED = '25 October 2026';
 
 const Mail = () => (

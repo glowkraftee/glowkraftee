@@ -421,7 +421,7 @@ export default function Contact() {
                         </span>
                         <div>
                           <p className="text-sm text-foreground-600 leading-relaxed">
-                            House # 29-C, Gosha-e-Ahbab Phase II,<br />
+                            House # 30-C, Gosha-e-Ahbab Phase II,<br />
                             Inside Azam Gardens, Multan Road,<br />
                             Lahore 54500, Pakistan
                           </p>
